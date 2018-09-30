@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class UIGameMain : MonoBehaviour {
 
-    public Button StartButton;
-
-    void Awake()
+    void Start()
     {
-        StartButton.onClick.AddListener(OnClickStart);
+        StartCoroutine(LoadingData());
     }
 
-    private void OnClickStart()
+    IEnumerator LoadingData()
     {
+        yield return DataManager.Instance.LoadingData();
         SceneManager.LoadScene("GamePlay", LoadSceneMode.Single);
     }
 }
