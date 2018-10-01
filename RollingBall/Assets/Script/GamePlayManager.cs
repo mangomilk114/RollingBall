@@ -37,6 +37,10 @@ public class GamePlayManager : MonoBehaviour
     public bool GamePlayingTouch = false;
     [System.NonSerialized]
     public bool IsStageClear = false;
+    [System.NonSerialized]
+    public int TurnCount = 1;
+    [System.NonSerialized]
+    public int Score = 0;
 
     private UIGamePlay GamePlayUI;
 
@@ -74,7 +78,7 @@ public class GamePlayManager : MonoBehaviour
         PlayTrack.Initialize(CurrStageData.track_img);
         GamePlayingTouch = false;
         IsStageClear = false;
-
+        Score = 0;
         ResetStage();
     }
 
@@ -334,8 +338,13 @@ public class GamePlayManager : MonoBehaviour
         {
             PlayBall.SetStageData(CurrStageData);
             IsStageClear = false;
+            TurnCount = 0;
         }
         else
+        {
+            TurnCount++;
             GamePlayManager.Instance.MinusHealthPoint(10);
+        }
+            
     }
 }
