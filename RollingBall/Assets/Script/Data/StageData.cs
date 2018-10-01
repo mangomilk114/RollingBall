@@ -5,19 +5,18 @@ using System.Xml;
 
 public class StageData
 {
-    public int Id;
-    public string TrackImg;
-    public float StartSpeed;
-    public int StarCount;
-    public bool StartRightDir = true;
-    // TODO 환웅 아이템 타입별로 갯수
+    public int id;
+    public string track_img;
+    public float start_speed;
+    public bool start_rightdir = true;
+    public int preset;
 
     public StageData(XmlNode node)
     {
-        Id = int.Parse(node.Attributes.GetNamedItem("id").Value);
-        TrackImg = node.Attributes.GetNamedItem("track_img").Value;
-        StartSpeed = float.Parse(node.Attributes.GetNamedItem("start_speed").Value);
-        StarCount = int.Parse(node.Attributes.GetNamedItem("star").Value);
-        StartRightDir = bool.Parse(node.Attributes.GetNamedItem("start_rightdir").Value);
+        id = int.Parse(node.Attributes.GetNamedItem("id").Value);
+        track_img = node.Attributes.GetNamedItem("track_img").Value;
+        start_speed = float.Parse(node.Attributes.GetNamedItem("start_speed").Value);
+        start_rightdir = bool.Parse(node.Attributes.GetNamedItem("start_rightdir").Value);
+        preset = int.Parse(node.Attributes.GetNamedItem("preset").Value);
     }
 }

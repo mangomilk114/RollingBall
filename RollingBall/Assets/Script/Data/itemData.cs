@@ -5,15 +5,15 @@ using System.Xml;
 
 public class ItemData
 {
-    public int Id;
-    public CommonData.ITEM_TYPE ItemType;
-    public string Img;
+    public int id;
+    public CommonData.ITEM_TYPE itemtype;
+    public string img;
 
     public ItemData(XmlNode node)
     {
-        Id = int.Parse(node.Attributes.GetNamedItem("id").Value);
+        id = int.Parse(node.Attributes.GetNamedItem("id").Value);
         SetItemType(node.Attributes.GetNamedItem("type").Value);
-        Img = node.Attributes.GetNamedItem("img").Value;
+        img = node.Attributes.GetNamedItem("img").Value;
     }
 
     private void SetItemType(string type)
@@ -21,10 +21,25 @@ public class ItemData
         switch(type)
         {
             case "STAR":
-                ItemType = CommonData.ITEM_TYPE.STAR;
+                itemtype = CommonData.ITEM_TYPE.STAR;
+                break;
+            case "SPEED_UP":
+                itemtype = CommonData.ITEM_TYPE.SPEED_UP;
+                break;
+            case "SPEED_DOWN":
+                itemtype = CommonData.ITEM_TYPE.SPEED_DOWN;
+                break;
+            case "BOMB":
+                itemtype = CommonData.ITEM_TYPE.BOMB;
+                break;
+            case "COIN":
+                itemtype = CommonData.ITEM_TYPE.COIN;
+                break;
+            case "POTION":
+                itemtype = CommonData.ITEM_TYPE.POTION;
                 break;
             default:
-                ItemType = CommonData.ITEM_TYPE.NONE;
+                itemtype = CommonData.ITEM_TYPE.NONE;
                 break;
         }
     }

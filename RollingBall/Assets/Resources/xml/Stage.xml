@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<Stage id = "1" track_img="track" start_speed="10" star="1" start_rightdir="TRUE"/>
-	<Stage id = "2" track_img="track" start_speed="15" star="1" start_rightdir="TRUE"/>
-	<Stage id = "3" track_img="track" start_speed="10" star="1" start_rightdir="TRUE"/>
-	<Stage id = "4" track_img="track" start_speed="20" star="1" start_rightdir="TRUE"/>
-	<Stage id = "5" track_img="track" start_speed="25" star="1" start_rightdir="TRUE"/>
+	<Stage id = "1" track_img="track" start_speed="10" start_rightdir="TRUE" preset="1"/>
+	<Stage id = "2" track_img="track" start_speed="15" start_rightdir="TRUE" preset="1"/>
+	<Stage id = "3" track_img="track" start_speed="10" start_rightdir="TRUE" preset="1"/>
+	<Stage id = "4" track_img="track" start_speed="20" start_rightdir="TRUE" preset="1"/>
+	<Stage id = "5" track_img="track" start_speed="25" start_rightdir="TRUE" preset="1"/>
 </Datas> 

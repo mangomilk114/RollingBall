@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Datas>
+	<StagePreset id = "1" star="3" speed_up="1" speed_down="1" bomb="1" coin="1" potion="1"/>
+</Datas> 

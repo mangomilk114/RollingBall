@@ -21,6 +21,7 @@ public class DataManager
 
     public Dictionary<int, BallData> BallDataDic = new Dictionary<int, BallData>();
     public List<StageData> StageDataList = new List<StageData>();
+    public Dictionary<int, StagePresetData> StagePresetDataDic = new Dictionary<int, StagePresetData>();
     public Dictionary<CommonData.ITEM_TYPE, ItemData> ItemDataDic = new Dictionary<CommonData.ITEM_TYPE, ItemData>();
     private List<KeyValuePair<string, string>> LoadingDataXmlList = new List<KeyValuePair<string, string>>();
 
@@ -31,7 +32,7 @@ public class DataManager
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Ball", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Stage", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Item", "Datas"));
-
+            LoadingDataXmlList.Add(new KeyValuePair<string, string>("StagePreset", "Datas"));
         }
 
         for (int i = 0; i < LoadingDataXmlList.Count; i++)
@@ -47,7 +48,7 @@ public class DataManager
                     foreach (XmlNode child in node.ChildNodes)
                     {
                         var data = new BallData(child);
-                        BallDataDic.Add(data.Id, data);
+                        BallDataDic.Add(data.id, data);
                     }
                 }
             }
@@ -69,7 +70,18 @@ public class DataManager
                     foreach (XmlNode child in node.ChildNodes)
                     {
                         var data = new ItemData(child);
-                        ItemDataDic.Add(data.ItemType, data);
+                        ItemDataDic.Add(data.itemtype, data);
+                    }
+                }
+            }
+            else if (xmlName == "StagePreset")
+            {
+                foreach (XmlNode node in list)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        var data = new StagePresetData(child);
+                        StagePresetDataDic.Add(data.id, data);
                     }
                 }
             }

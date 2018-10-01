@@ -5,12 +5,12 @@ using System.Xml;
 
 public class BallData
 {
-    public int Id;
-    public string BallImg;
+    public int id;
+    public string ball_img;
 
     public BallData(XmlNode node)
     {
-        Id = int.Parse(node.Attributes.GetNamedItem("id").Value);
-        BallImg = node.Attributes.GetNamedItem("ball_img").Value;
+        id = int.Parse(node.Attributes.GetNamedItem("id").Value);
+        ball_img = node.Attributes.GetNamedItem("ball_img").Value;
     }
 }

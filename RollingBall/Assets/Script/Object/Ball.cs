@@ -14,9 +14,6 @@ public class Ball : MonoBehaviour {
 
     public bool BallMoveRightDir = true;
 
-    private int HealthPoint = 0;
-    private int MaxHealthPoint = 0;
-
     private CollisionObject CurrCollisionObject = null;
 
 
@@ -24,11 +21,10 @@ public class Ball : MonoBehaviour {
     {
         CenterPos = centerPos;
 
-        HealthPoint = CommonData.DEFAULT_BALL_HEALTH_POINT;
-        MaxHealthPoint = CommonData.MAX_BALL_HEALTH_POINT;
+
         RadiusDistance = CommonData.TRACK_RADIUS_DISTANCE;
         Data = DataManager.Instance.BallDataDic[id];
-        Img.sprite = (Sprite)Resources.Load(Data.BallImg, typeof(Sprite));
+        Img.sprite = (Sprite)Resources.Load(Data.ball_img, typeof(Sprite));
 
         CurrCollisionObject = null;
     }
@@ -36,8 +32,8 @@ public class Ball : MonoBehaviour {
     public void SetStageData(StageData stageData)
     {
         StageData = stageData;
-        MoveSpeed = StageData.StartSpeed;
-        BallMoveRightDir = StageData.StartRightDir;
+        MoveSpeed = StageData.start_speed;
+        BallMoveRightDir = StageData.start_rightdir;
     }
 
     public void BallTouchAcion(bool touch)
@@ -69,23 +65,6 @@ public class Ball : MonoBehaviour {
         gameObject.transform.position = Pos;
     }
 
-    public void PlusHealthPoint(int value)
-    {
-        HealthPoint += value;
-        if (HealthPoint >= MaxHealthPoint)
-            HealthPoint = MaxHealthPoint;
-    }
-
-    public void MinusHealthPoint(int value)
-    {
-        HealthPoint -= value;
-    }
-
-    public int GetHealthPoint()
-    {
-        return HealthPoint;
-    }
-
     public CollisionObject.OBJECT_TYPE GetTriggerObjectType()
     {
         if (CurrCollisionObject == null)
@@ -106,7 +85,7 @@ public class Ball : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        CurrCollisionObject = null;
+        ResetCollisionObject();
     }
 
     // 등가속도 운동

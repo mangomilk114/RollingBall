@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<Item id = "1" type="STAR" img="cone" />
+	<Item id = "1" type="STAR" img="Star" />
+	<Item id = "2" type="SPEED_UP" img="SpeedUp" />
+	<Item id = "3" type="SPEED_DOWN" img="SpeedDown" />
+	<Item id = "4" type="BOMB" img="Bomb" />
+	<Item id = "5" type="COIN" img="Coin" />
+	<Item id = "6" type="POTION" img="Potion" />
 </Datas> 
