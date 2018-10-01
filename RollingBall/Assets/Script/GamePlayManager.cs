@@ -35,6 +35,9 @@ public class GamePlayManager : MonoBehaviour
 
     [System.NonSerialized]
     public bool GamePlayingTouch = false;
+    [System.NonSerialized]
+    public bool IsStageClear = false;
+
     private UIGamePlay GamePlayUI;
 
     public Ball PlayBall;
@@ -70,6 +73,7 @@ public class GamePlayManager : MonoBehaviour
         PlayBall.Initialize(CenterPos, 1);
         PlayTrack.Initialize(CurrStageData.track_img);
         GamePlayingTouch = false;
+        IsStageClear = false;
 
         ResetStage();
     }
@@ -183,7 +187,6 @@ public class GamePlayManager : MonoBehaviour
 
     public void MinusHealthPoint(int value)
     {
-        return;
         HealthPoint -= value;
         if (HealthPoint <= 0)
             GameEnd();
@@ -288,7 +291,7 @@ public class GamePlayManager : MonoBehaviour
                 case CommonData.ITEM_TYPE.COIN:
                     break;
                 case CommonData.ITEM_TYPE.POTION:
-                    MinusHealthPoint(10);
+                    PlusHealthPoint(10);
                     break;
                 default:
                     break;
@@ -310,7 +313,9 @@ public class GamePlayManager : MonoBehaviour
             }
         }
 
-        if(stageClear)
+        IsStageClear = stageClear;
+
+        if (stageClear)
         {
             StageIndex++;
 
@@ -325,19 +330,10 @@ public class GamePlayManager : MonoBehaviour
 
     public void PassStartPos()
     {
-        bool stageClear = true;
-        for (int i = 0; i < ItemObjectList.Count; i++)
-        {
-            if (ItemObjectList[i].ItemType == CommonData.ITEM_TYPE.STAR)
-            {
-                stageClear = false;
-                break;
-            }
-        }
-
-        if (stageClear)
+        if (IsStageClear)
         {
             PlayBall.SetStageData(CurrStageData);
+            IsStageClear = false;
         }
         else
             GamePlayManager.Instance.MinusHealthPoint(10);
