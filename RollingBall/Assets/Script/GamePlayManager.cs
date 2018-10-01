@@ -19,6 +19,7 @@ public class GamePlayManager : MonoBehaviour
 
     public enum GAME_STATE
     {
+        NONE,
         MAIN,
         READY,
         PLAY,
@@ -43,6 +44,7 @@ public class GamePlayManager : MonoBehaviour
     public CollisionObject BallStart;
     public CollisionObject BallEndCheck_Left;
     public CollisionObject BallEndCheck_Right;
+
 
     void Start()
     {
@@ -69,35 +71,35 @@ public class GamePlayManager : MonoBehaviour
         PlayTrack.Initialize(CurrStageData.track_img);
         GamePlayingTouch = false;
 
-        for (int i = 0; i < ItemObjectList.Count; i++)
-        {
-            ItemObjectList[i].ResetItem();
-        }
+        ResetStage();
     }
 
     public void GameMain()
     {
         CurrGameState = GAME_STATE.MAIN;
         ResetGamePlay();
-        SetStage();
+        PlayBall.SetStageData(CurrStageData);
+        StartCoroutine(CoGameUpdate());
     }
 
     public void GameReady()
     {
         CurrGameState = GAME_STATE.READY;
         ResetGamePlay();
-        
+        SetStage();
+        PlayBall.ResetPos();
     }
 
     public void GamePlay()
     {
         CurrGameState = GAME_STATE.PLAY;
-        ResetGamePlay();
     }
 
     public void GameEnd()
     {
         CurrGameState = GAME_STATE.END;
+        ResetStage();
+        PlayBall.ResetPos();
     }
 
     public void GamePause()
@@ -112,8 +114,6 @@ public class GamePlayManager : MonoBehaviour
 
     public void ChangeGameState()
     {
-        SetStage();
-        return;
         switch (CurrGameState)
         {
             case GAME_STATE.MAIN:
@@ -126,6 +126,7 @@ public class GamePlayManager : MonoBehaviour
                 GamePlayingTouch = true;
                 break;
             case GAME_STATE.END:
+                GameReady();
                 break;
             case GAME_STATE.PAUSE:
                 break;
@@ -139,18 +140,27 @@ public class GamePlayManager : MonoBehaviour
     {
         while (true)
         {
-            if (CurrGameState != GAME_STATE.PLAY)
+            GamePlayUI.UpdateUI();
+
+            if (CurrGameState == GAME_STATE.READY ||
+                CurrGameState == GAME_STATE.END ||
+                CurrGameState == GAME_STATE.PAUSE)
             {
                 yield return null;
                 continue;
             }
+            
 
             PlayBall.UpdateBall(Time.deltaTime);
+
+            if (CurrGameState == GAME_STATE.PLAY)
+                PlayBall.BallCollisionAcion(GamePlayingTouch);
+            GamePlayingTouch = false;
 
             //PlayBall.BallTouchAcion(BallAction);
             //BallAction = false;
 
-            
+
             //StageClearCheck();
             //StageStart();
 
@@ -173,17 +183,23 @@ public class GamePlayManager : MonoBehaviour
 
     public void MinusHealthPoint(int value)
     {
+        return;
         HealthPoint -= value;
         if (HealthPoint <= 0)
             GameEnd();
     }
 
-    public void SetStage()
+    public void ResetStage()
     {
         for (int i = 0; i < ItemObjectList.Count; i++)
         {
             ItemObjectList[i].ResetItem();
         }
+    }
+
+    public void SetStage()
+    {
+        ResetStage();
 
         var StagePresetData = DataManager.Instance.StagePresetDataDic[CurrStageData.preset];
         if (StagePresetData.itemcount > CommonData.STAGE_ALL_ITEM_COUNT)
@@ -233,7 +249,97 @@ public class GamePlayManager : MonoBehaviour
                 break;
 
             ItemObjectList[i].SetPlace(ItemDegreeList[i].Key);
-            ItemObjectList[i].SetData(ItemDegreeList[i].Value);
+            ItemObjectList[i].SetData(ItemDegreeList[i].Value, i);
         }
+    }
+
+    private bool RemoveItem(Item item)
+    {
+        for (int i = 0; i < ItemObjectList.Count; i++)
+        {
+            if(ItemObjectList[i].UniqueIndex == item.UniqueIndex)
+            {
+                ItemObjectList[i].ResetItem();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HaveItem(Item item)
+    {
+        var removeEnable = RemoveItem(item);
+
+        if(removeEnable)
+        {
+            switch (item.ItemType)
+            {
+                case CommonData.ITEM_TYPE.STAR:
+                    break;
+                case CommonData.ITEM_TYPE.SPEED_UP:
+                    PlayBall.PlusMoveSpeed(5f);
+                    break;
+                case CommonData.ITEM_TYPE.SPEED_DOWN:
+                    PlayBall.PlusMoveSpeed(-5f);
+                    break;
+                case CommonData.ITEM_TYPE.BOMB:
+                    MinusHealthPoint(10);
+                    break;
+                case CommonData.ITEM_TYPE.COIN:
+                    break;
+                case CommonData.ITEM_TYPE.POTION:
+                    MinusHealthPoint(10);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return removeEnable;
+    }
+
+    public void SetStageClearCheck()
+    {
+        bool stageClear = true;
+        for (int i = 0; i < ItemObjectList.Count; i++)
+        {
+            if (ItemObjectList[i].ItemType == CommonData.ITEM_TYPE.STAR)
+            {
+                stageClear = false;
+                break;
+            }
+        }
+
+        if(stageClear)
+        {
+            StageIndex++;
+
+            // TODO 환웅 임시
+            if (DataManager.Instance.StageDataList.Count <= StageIndex)
+                StageIndex = 0;
+            
+            CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+            SetStage();
+        }
+    }
+
+    public void PassStartPos()
+    {
+        bool stageClear = true;
+        for (int i = 0; i < ItemObjectList.Count; i++)
+        {
+            if (ItemObjectList[i].ItemType == CommonData.ITEM_TYPE.STAR)
+            {
+                stageClear = false;
+                break;
+            }
+        }
+
+        if (stageClear)
+        {
+            PlayBall.SetStageData(CurrStageData);
+        }
+        else
+            GamePlayManager.Instance.MinusHealthPoint(10);
     }
 }

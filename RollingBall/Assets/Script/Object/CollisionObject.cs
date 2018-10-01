@@ -8,6 +8,7 @@ public class CollisionObject : MonoBehaviour
     {
         NONE,
         ITEM,
+        BALL,
         STAGE_END_LEFT,
         STAGE_END_RIGHT,
         STAGE_START,

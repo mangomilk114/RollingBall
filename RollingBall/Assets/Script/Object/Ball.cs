@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour {
-
+public class Ball : CollisionObject
+{
     public SpriteRenderer Img;
     private Transform CenterPos;
 
@@ -14,19 +14,23 @@ public class Ball : MonoBehaviour {
 
     public bool BallMoveRightDir = true;
 
-    private CollisionObject CurrCollisionObject = null;
+    public CollisionObject CurrCollisionObject = null;
 
 
     public void Initialize(Transform centerPos, int id)
     {
         CenterPos = centerPos;
 
-
         RadiusDistance = CommonData.TRACK_RADIUS_DISTANCE;
         Data = DataManager.Instance.BallDataDic[id];
         Img.sprite = (Sprite)Resources.Load(Data.ball_img, typeof(Sprite));
 
         CurrCollisionObject = null;
+    }
+
+    public void ResetPos()
+    {
+        SetPlace(180f);
     }
 
     public void SetStageData(StageData stageData)
@@ -36,11 +40,34 @@ public class Ball : MonoBehaviour {
         BallMoveRightDir = StageData.start_rightdir;
     }
 
-    public void BallTouchAcion(bool touch)
+    public void BallCollisionAcion(bool touch)
     {
         if (CurrCollisionObject != null)
         {
-
+            if ((CurrCollisionObject.Type == OBJECT_TYPE.STAGE_END_LEFT && BallMoveRightDir) ||
+               (CurrCollisionObject.Type == OBJECT_TYPE.STAGE_END_RIGHT && BallMoveRightDir == false))
+            {
+                // 스테이지 클리어 체크
+                GamePlayManager.Instance.SetStageClearCheck();
+                CurrCollisionObject = null;
+            }
+            else if (CurrCollisionObject.Type == OBJECT_TYPE.ITEM && touch)
+            {
+                var itemObj = CurrCollisionObject.GetComponent<Item>();
+                var removeEnable = GamePlayManager.Instance.HaveItem(itemObj);
+                if (removeEnable)
+                    CurrCollisionObject = null;
+            }
+            else if (CurrCollisionObject.Type == OBJECT_TYPE.STAGE_START)
+            {
+                GamePlayManager.Instance.PassStartPos();
+                CurrCollisionObject = null;
+            }
+        }
+        else
+        {
+            if (touch)
+                GamePlayManager.Instance.MinusHealthPoint(10);
         }
     }
 
@@ -65,27 +92,30 @@ public class Ball : MonoBehaviour {
         gameObject.transform.position = Pos;
     }
 
-    public CollisionObject.OBJECT_TYPE GetTriggerObjectType()
+    public void PlusMoveSpeed(float speed)
     {
-        if (CurrCollisionObject == null)
-            return CollisionObject.OBJECT_TYPE.NONE;
-
-        return CurrCollisionObject.Type;
+        MoveSpeed += speed;
     }
 
-    public void ResetCollisionObject()
-    {
-        CurrCollisionObject = null;
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    CurrCollisionObject = collision.gameObject.GetComponent<CollisionObject>();
+    //}
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    CurrCollisionObject = null;
+    //}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         CurrCollisionObject = collision.gameObject.GetComponent<CollisionObject>();
+        Debug.Log("OnTriggerEnter2D");
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        ResetCollisionObject();
+        CurrCollisionObject = null;
+        Debug.Log("OnTriggerExit2D");
     }
 
     // 등가속도 운동
@@ -174,8 +204,5 @@ public class Ball : MonoBehaviour {
     //    return Angle;
     //}
 
-    public void PlusMoveSpeed(float speed)
-    {
-        MoveSpeed += speed;
-    }
+
 }

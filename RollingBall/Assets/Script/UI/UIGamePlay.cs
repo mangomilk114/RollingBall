@@ -51,6 +51,29 @@ public class UIGamePlay : MonoBehaviour
     {
 
     }
+
+    public void UpdateUI()
+    {
+        switch (GamePlayManager.Instance.CurrGameState)
+        {
+            case GamePlayManager.GAME_STATE.MAIN:
+                StageText.text = string.Format("메인 화면 피 {0}", GamePlayManager.Instance.HealthPoint);
+                break;
+            case GamePlayManager.GAME_STATE.READY:
+                StageText.text = string.Format("레디 화면 {0}", GamePlayManager.Instance.HealthPoint);
+                break;
+            case GamePlayManager.GAME_STATE.PLAY:
+                StageText.text = string.Format("플레이 {0}", GamePlayManager.Instance.HealthPoint);
+                break;
+            case GamePlayManager.GAME_STATE.END:
+                StageText.text = string.Format("종료 {0}", GamePlayManager.Instance.HealthPoint);
+                break;
+            case GamePlayManager.GAME_STATE.PAUSE:
+                break;
+            default:
+                break;
+        }
+    }
     
 
     //private void StageClearCheck()
