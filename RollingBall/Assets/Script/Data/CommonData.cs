@@ -36,4 +36,6 @@ public class CommonData
     public static float IN_GAMEOBJECT_CRASH_DEGREE_GAP = 10;
     public static int TOUCH_MINUS_HP = 10;
     public static int TURN_TRACK_MINUS_HP = 5;
+
+    public static int COIN_ITEM_CRAETE_PERCENT = 10;
 }

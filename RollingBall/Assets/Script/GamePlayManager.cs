@@ -205,15 +205,13 @@ public class GamePlayManager : MonoBehaviour
         ResetStage();
 
         var StagePresetData = DataManager.Instance.StagePresetDataDic[CurrStageData.preset];
-        if (StagePresetData.itemcount > CommonData.STAGE_ALL_ITEM_COUNT)
-            return;
 
         List<KeyValuePair<int, string>> ItemDegreeList = new List<KeyValuePair<int, string>>();
-        var enumerator = StagePresetData.itemTypedic.GetEnumerator();
-        while (enumerator.MoveNext())
+        var itemList = StagePresetData.GetPresetItemList();
+        for (int listIndex = 0; listIndex < itemList.Count; listIndex++)
         {
-            string ItemName = enumerator.Current.Key;
-            int Count = enumerator.Current.Value;
+            string ItemName = itemList[listIndex].Key;
+            int Count = itemList[listIndex].Value;
 
             for (int index_1 = 0; index_1 < Count; index_1++)
             {
@@ -224,7 +222,7 @@ public class GamePlayManager : MonoBehaviour
                     for (int index_2 = 0; index_2 < ItemDegreeList.Count; index_2++)
                     {
                         float gap = GetTargetToObjectAngleGap(ItemDegreeList[index_2].Key, degree);
-                        if(gap < CommonData.ITEM_DEGREE_GAP)
+                        if (gap < CommonData.ITEM_DEGREE_GAP)
                         {
                             addEnable = false;
                             break;
@@ -242,8 +240,15 @@ public class GamePlayManager : MonoBehaviour
                         ItemDegreeList.Add(new KeyValuePair<int, string>(degree, ItemName));
                         break;
                     }
+
+                    if (ItemDegreeList.Count >= CommonData.STAGE_ALL_ITEM_COUNT)
+                        break;
                 }
-            } 
+                if (ItemDegreeList.Count >= CommonData.STAGE_ALL_ITEM_COUNT)
+                    break;
+            }
+            if (ItemDegreeList.Count >= CommonData.STAGE_ALL_ITEM_COUNT)
+                break;
         }
 
         for (int i = 0; i < ItemObjectList.Count; i++)

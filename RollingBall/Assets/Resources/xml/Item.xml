@@ -3,7 +3,7 @@
 	<Item id = "1" name="STAR" type="STAR" img="Star" value="1"/>
 	<Item id = "2" name="SPEED_UP_LV1" type="SPEED_UP" img="SpeedUp" value="5"/>
 	<Item id = "3" name="SPEED_DOWN_LV1" type="SPEED_DOWN" img="SpeedDown" value="5"/>
-	<Item id = "4" name="SPEED_BOMB_LV1" type="BOMB" img="Bomb" value="20"/>
-	<Item id = "5" name="SPEED_COIN_LV1" type="COIN" img="Coin"  value="10"/>
-	<Item id = "6" name="SPEED_POTION_LV1" type="POTION" img="Potion"  value="10"/>
+	<Item id = "4" name="BOMB_LV1" type="BOMB" img="Bomb" value="20"/>
+	<Item id = "5" name="COIN" type="COIN" img="Coin"  value="10"/>
+	<Item id = "6" name="POTION_LV1" type="POTION" img="Potion"  value="10"/>
 </Datas> 
