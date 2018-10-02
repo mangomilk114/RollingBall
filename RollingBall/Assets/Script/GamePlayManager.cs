@@ -48,10 +48,10 @@ public class GamePlayManager : MonoBehaviour
     public Track PlayTrack;
     public Transform CenterPos;
     public List<Item> ItemObjectList = new List<Item>();
-    public CollisionObject BallStart;
-    public CollisionObject BallEndCheck_Left;
-    public CollisionObject BallEndCheck_Right;
-
+    public InGameObject BallStart;
+    public InGameObject BallEndCheck_Left;
+    public InGameObject BallEndCheck_Right;
+    public CommonData.OBJECT_TYPE BallCrashType = CommonData.OBJECT_TYPE.NONE;
 
     void Start()
     {
@@ -157,13 +157,12 @@ public class GamePlayManager : MonoBehaviour
                 yield return null;
                 continue;
             }
-            
-
+            if (CurrGameState == GAME_STATE.PLAY)
+                BallCrashAcion(GamePlayingTouch);
+            GamePlayingTouch = false;
             PlayBall.UpdateBall(Time.deltaTime);
 
-            if (CurrGameState == GAME_STATE.PLAY)
-                PlayBall.BallCollisionAcion(GamePlayingTouch);
-            GamePlayingTouch = false;
+            
 
             //PlayBall.BallTouchAcion(BallAction);
             //BallAction = false;
@@ -343,8 +342,144 @@ public class GamePlayManager : MonoBehaviour
         else
         {
             TurnCount++;
-            GamePlayManager.Instance.MinusHealthPoint(10);
+            MinusHealthPoint(10);
         }
             
+    }
+
+
+    public void BallCrashAcion(bool touch)
+    {
+        var crashObject = GetBallToObjectCrashObject();
+        if (crashObject == null)
+        {
+            BallCrashType = CommonData.OBJECT_TYPE.NONE;
+            return;
+        }
+
+
+        switch (crashObject.Type)
+        {
+            case CommonData.OBJECT_TYPE.ITEM:
+                var itemObj = crashObject.GetComponent<Item>();
+                if (touch)
+                {
+                    var removeEnable = HaveItem(itemObj);
+                }
+                else
+                {
+                    // 통과되면 난리나는 애들
+                }
+                break;
+            case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
+                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_LEFT)
+                    return;
+                if (PlayBall.BallMoveRightDir)
+                    SetStageClearCheck();
+                break;
+            case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
+                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_RIGHT)
+                    return;
+                if (PlayBall.BallMoveRightDir == false)
+                    SetStageClearCheck();
+                break;
+            case CommonData.OBJECT_TYPE.STAGE_START:
+                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_START)
+                    return;
+                PassStartPos();
+                break;
+            default:
+                break;
+        }
+
+        BallCrashType = crashObject.Type;
+    }
+
+    private float GetCenterToBallAngle()
+    {
+        var Pos = PlayBall.gameObject.transform.position;
+        float Angle;
+        float dX = CenterPos.position.x - Pos.x;
+        float dY = CenterPos.position.y - Pos.y;
+
+        float dRad = Mathf.Atan2(dY, dX);
+        Angle = (float)((dRad * 180) / 3.14159265);
+        Angle += 90;
+
+        if (Angle < 0)
+            Angle = 360 + Angle;
+
+        return Angle;
+    }
+
+    private float GetBallToObjectAngleGap(float ballAngle, InGameObject obj)
+    {
+        float gap = 0f;
+        if (ballAngle > 270f && ballAngle < 360f &&
+               obj.Degree > 0f && obj.Degree < 90f)
+        {
+            gap = (obj.Degree + 360f) - ballAngle;
+        }
+        else if (ballAngle > 0f && ballAngle < 90f &&
+           obj.Degree > 270f && obj.Degree < 360f)
+        {
+            gap = (ballAngle + 360f) - obj.Degree;
+        }
+        else if (ballAngle > obj.Degree)
+            gap = ballAngle - obj.Degree;
+        else
+            gap = obj.Degree - ballAngle;
+
+        return Mathf.Abs(gap);
+    }
+    private InGameObject GetBallToObjectCrashObject()
+    {
+        InGameObject crashObject = null;
+        var ballAngle = GetCenterToBallAngle();
+        float minGap = float.MaxValue;
+        int minGapIndex = -1;
+        for (int i = 0; i < ItemObjectList.Count; i++)
+        {
+            if (ItemObjectList[i].UniqueIndex >= 0)
+            {
+                float gap = GetBallToObjectAngleGap(ballAngle, ItemObjectList[i]);
+
+                if (minGap > gap)
+                {
+                    minGap = gap;
+                    minGapIndex = i;
+                }
+            }
+        }
+
+        
+
+        if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= minGap && minGapIndex >= 0)
+        {
+            crashObject = ItemObjectList[minGapIndex];
+        }
+
+        if(crashObject != null)
+        {
+            float startCheckGap = GetBallToObjectAngleGap(ballAngle, BallStart);
+            if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                crashObject = BallStart;
+
+            if (PlayBall.BallMoveRightDir)
+            {
+                float LeftCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Left);
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                    crashObject = BallEndCheck_Left;
+            }
+            else
+            {
+                float RightCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Right);
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                    crashObject = BallEndCheck_Right;
+            }
+        }
+        
+
+        return crashObject;
     }
 }
