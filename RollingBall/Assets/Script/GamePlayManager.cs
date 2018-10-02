@@ -70,7 +70,7 @@ public class GamePlayManager : MonoBehaviour
 
     public void ResetGamePlay()
     {
-        StageIndex = 0;
+        StageIndex = PlayerData.Instance.StageIndex;
         CurrStageData = DataManager.Instance.StageDataList[StageIndex];
         HealthPoint = CommonData.DEFAULT_BALL_HEALTH_POINT;
         MaxHealthPoint = CommonData.MAX_BALL_HEALTH_POINT;
@@ -78,7 +78,7 @@ public class GamePlayManager : MonoBehaviour
         PlayTrack.Initialize(CurrStageData.track_img);
         GamePlayingTouch = false;
         IsStageClear = false;
-        Score = 0;
+        Score = PlayerData.Instance.Score;
         ResetStage();
     }
 
@@ -337,7 +337,8 @@ public class GamePlayManager : MonoBehaviour
             // TODO 환웅 임시
             if (DataManager.Instance.StageDataList.Count <= StageIndex)
                 StageIndex = 0;
-            
+
+            PlayerData.Instance.SetStageIndex(StageIndex);
             CurrStageData = DataManager.Instance.StageDataList[StageIndex];
             SetStage();
         }
