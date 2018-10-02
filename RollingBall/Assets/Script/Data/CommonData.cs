@@ -34,5 +34,6 @@ public class CommonData
     public static int STAGE_ALL_ITEM_COUNT = 15;
     public static int ITEM_DEGREE_GAP = 15;
     public static float IN_GAMEOBJECT_CRASH_DEGREE_GAP = 10;
-
+    public static int TOUCH_MINUS_HP = 10;
+    public static int TURN_TRACK_MINUS_HP = 5;
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Item : InGameObject
 {
-    // TODO 환웅 아이템 오브젝트 풀
     public CommonData.ITEM_TYPE ItemType = CommonData.ITEM_TYPE.NONE;
     public SpriteRenderer Img;
     public int UniqueIndex = -1;

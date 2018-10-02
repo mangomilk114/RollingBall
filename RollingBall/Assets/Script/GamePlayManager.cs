@@ -354,7 +354,7 @@ public class GamePlayManager : MonoBehaviour
         else
         {
             TurnCount++;
-            MinusHealthPoint(10);
+            MinusHealthPoint(CommonData.TURN_TRACK_MINUS_HP);
         }
             
     }
@@ -406,7 +406,7 @@ public class GamePlayManager : MonoBehaviour
         
 
         if (touch && minusHealthPointEnable)
-            MinusHealthPoint(10);
+            MinusHealthPoint(CommonData.TOUCH_MINUS_HP);
     }
 
     private float GetCenterToBallAngle()
