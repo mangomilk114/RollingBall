@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Item : InGameObject
 {
+    public string ItemName = "";
     public CommonData.ITEM_TYPE ItemType = CommonData.ITEM_TYPE.NONE;
     public SpriteRenderer Img;
     public int UniqueIndex = -1;
-    private ItemData Data;
+    public ItemData Data;
 
     public void ResetItem()
     {
@@ -16,13 +17,15 @@ public class Item : InGameObject
         ItemType = CommonData.ITEM_TYPE.NONE;
         Img.sprite = null;
         UniqueIndex = -1;
+        ItemName = "";
     }
 
-    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex)
+    public void SetData(string name, int uniqueIndex)
     {
         gameObject.SetActive(true);
         UniqueIndex = uniqueIndex;
-        Data = DataManager.Instance.ItemDataDic[type];
+        Data = DataManager.Instance.ItemDataDic[name];
+        ItemName = Data.name;
 
         ItemType = Data.itemtype;
         Img.sprite = (Sprite)Resources.Load(Data.img, typeof(Sprite));

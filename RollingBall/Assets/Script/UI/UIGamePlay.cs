@@ -90,7 +90,7 @@ public class UIGamePlay : MonoBehaviour
         info.AppendLine(string.Format("현재 공 방향 : {0}", GamePlayManager.Instance.CurrStageData.start_rightdir ? "오른쪽" : "왼쪽"));
         info.AppendLine(string.Format("현재 체력 : {0} / {1}", GamePlayManager.Instance.HealthPoint, GamePlayManager.Instance.MaxHealthPoint));
         info.AppendLine(string.Format("현재 바퀴수 : {0}", GamePlayManager.Instance.TurnCount));
-        info.AppendLine(string.Format("현재 점수 : {0}", GamePlayManager.Instance.Score));
+        info.AppendLine(string.Format("현재 점수 : {0}", PlayerData.Instance.Score));
         Info.text = info.ToString();
     }
 }

@@ -39,8 +39,6 @@ public class GamePlayManager : MonoBehaviour
     public bool IsStageClear = false;
     [System.NonSerialized]
     public int TurnCount = 1;
-    [System.NonSerialized]
-    public int Score = 0;
 
     private UIGamePlay GamePlayUI;
 
@@ -78,7 +76,6 @@ public class GamePlayManager : MonoBehaviour
         PlayTrack.Initialize(CurrStageData.track_img);
         GamePlayingTouch = false;
         IsStageClear = false;
-        Score = PlayerData.Instance.Score;
         ResetStage();
     }
 
@@ -211,11 +208,11 @@ public class GamePlayManager : MonoBehaviour
         if (StagePresetData.itemcount > CommonData.STAGE_ALL_ITEM_COUNT)
             return;
 
-        List<KeyValuePair<int, CommonData.ITEM_TYPE>> ItemDegreeList = new List<KeyValuePair<int, CommonData.ITEM_TYPE>>();
+        List<KeyValuePair<int, string>> ItemDegreeList = new List<KeyValuePair<int, string>>();
         var enumerator = StagePresetData.itemTypedic.GetEnumerator();
         while (enumerator.MoveNext())
         {
-            CommonData.ITEM_TYPE itemType = enumerator.Current.Key;
+            string ItemName = enumerator.Current.Key;
             int Count = enumerator.Current.Value;
 
             for (int index_1 = 0; index_1 < Count; index_1++)
@@ -226,8 +223,8 @@ public class GamePlayManager : MonoBehaviour
                     bool addEnable = true;
                     for (int index_2 = 0; index_2 < ItemDegreeList.Count; index_2++)
                     {
-                        if(degree >= ItemDegreeList[index_2].Key - CommonData.ITEM_DEGREE_GAP &&
-                           degree <= ItemDegreeList[index_2].Key + CommonData.ITEM_DEGREE_GAP)
+                        float gap = GetTargetToObjectAngleGap(ItemDegreeList[index_2].Key, degree);
+                        if(gap < CommonData.ITEM_DEGREE_GAP)
                         {
                             addEnable = false;
                             break;
@@ -242,7 +239,7 @@ public class GamePlayManager : MonoBehaviour
 
                     if (addEnable)
                     {
-                        ItemDegreeList.Add(new KeyValuePair<int, CommonData.ITEM_TYPE>(degree, itemType));
+                        ItemDegreeList.Add(new KeyValuePair<int, string>(degree, ItemName));
                         break;
                     }
                 }
@@ -277,9 +274,10 @@ public class GamePlayManager : MonoBehaviour
         switch (item.ItemType)
         {
             case CommonData.ITEM_TYPE.POTION:
-                PlusHealthPoint(10);
+                PlusHealthPoint(item.Data.value);
                 break;
             case CommonData.ITEM_TYPE.COIN:
+                PlayerData.Instance.PlusScore(item.Data.value);
                 break;
             case CommonData.ITEM_TYPE.STAR:
                 break;
@@ -303,13 +301,13 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.POTION:
                 return;
             case CommonData.ITEM_TYPE.SPEED_UP:
-                PlayBall.PlusMoveSpeed(5f);
+                PlayBall.PlusMoveSpeed(item.Data.value);
                 break;
             case CommonData.ITEM_TYPE.SPEED_DOWN:
-                PlayBall.PlusMoveSpeed(-5f);
+                PlayBall.PlusMoveSpeed(-item.Data.value);
                 break;
             case CommonData.ITEM_TYPE.BOMB:
-                MinusHealthPoint(10);
+                MinusHealthPoint(item.Data.value);
                 break;
             default:
                 break;
@@ -348,6 +346,7 @@ public class GamePlayManager : MonoBehaviour
     {
         if (IsStageClear)
         {
+            HealthPoint = CommonData.DEFAULT_BALL_HEALTH_POINT;
             PlayBall.SetStageData(CurrStageData);
             IsStageClear = false;
             TurnCount = 0;
@@ -427,26 +426,32 @@ public class GamePlayManager : MonoBehaviour
         return Angle;
     }
 
-    private float GetBallToObjectAngleGap(float ballAngle, InGameObject obj)
+    private float GetTargetToObjectAngleGap(float target, InGameObject obj)
+    {
+        return GetTargetToObjectAngleGap(target, obj.Degree);
+    }
+
+    private float GetTargetToObjectAngleGap(float target, float degree)
     {
         float gap = 0f;
-        if (ballAngle > 270f && ballAngle < 360f &&
-               obj.Degree > 0f && obj.Degree < 90f)
+        if (target > 270f && target < 360f &&
+               degree > 0f && degree < 90f)
         {
-            gap = (obj.Degree + 360f) - ballAngle;
+            gap = (degree + 360f) - target;
         }
-        else if (ballAngle > 0f && ballAngle < 90f &&
-           obj.Degree > 270f && obj.Degree < 360f)
+        else if (target > 0f && target < 90f &&
+           degree > 270f && degree < 360f)
         {
-            gap = (ballAngle + 360f) - obj.Degree;
+            gap = (target + 360f) - degree;
         }
-        else if (ballAngle > obj.Degree)
-            gap = ballAngle - obj.Degree;
+        else if (target > degree)
+            gap = target - degree;
         else
-            gap = obj.Degree - ballAngle;
+            gap = degree - target;
 
         return Mathf.Abs(gap);
     }
+
     private InGameObject GetBallToObjectCrashObject()
     {
         InGameObject crashObject = null;
@@ -457,7 +462,7 @@ public class GamePlayManager : MonoBehaviour
         {
             if (ItemObjectList[i].UniqueIndex >= 0)
             {
-                float gap = GetBallToObjectAngleGap(ballAngle, ItemObjectList[i]);
+                float gap = GetTargetToObjectAngleGap(ballAngle, ItemObjectList[i]);
 
                 if (minGap > gap)
                 {
@@ -476,19 +481,19 @@ public class GamePlayManager : MonoBehaviour
 
         if(crashObject == null)
         {
-            float startCheckGap = GetBallToObjectAngleGap(ballAngle, BallStart);
+            float startCheckGap = GetTargetToObjectAngleGap(ballAngle, BallStart);
             if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
                 crashObject = BallStart;
 
             if (PlayBall.BallMoveRightDir)
             {
-                float LeftCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Left);
+                float LeftCheckGap = GetTargetToObjectAngleGap(ballAngle, BallEndCheck_Left);
                 if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= LeftCheckGap)
                     crashObject = BallEndCheck_Left;
             }
             else
             {
-                float RightCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Right);
+                float RightCheckGap = GetTargetToObjectAngleGap(ballAngle, BallEndCheck_Right);
                 if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= RightCheckGap)
                     crashObject = BallEndCheck_Right;
             }

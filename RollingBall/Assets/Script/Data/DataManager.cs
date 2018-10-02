@@ -22,7 +22,7 @@ public class DataManager
     public Dictionary<int, BallData> BallDataDic = new Dictionary<int, BallData>();
     public List<StageData> StageDataList = new List<StageData>();
     public Dictionary<int, StagePresetData> StagePresetDataDic = new Dictionary<int, StagePresetData>();
-    public Dictionary<CommonData.ITEM_TYPE, ItemData> ItemDataDic = new Dictionary<CommonData.ITEM_TYPE, ItemData>();
+    public Dictionary<string, ItemData> ItemDataDic = new Dictionary<string, ItemData>();
     private List<KeyValuePair<string, string>> LoadingDataXmlList = new List<KeyValuePair<string, string>>();
 
     public IEnumerator LoadingData()
@@ -70,7 +70,7 @@ public class DataManager
                     foreach (XmlNode child in node.ChildNodes)
                     {
                         var data = new ItemData(child);
-                        ItemDataDic.Add(data.itemtype, data);
+                        ItemDataDic.Add(data.name, data);
                     }
                 }
             }

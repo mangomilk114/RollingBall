@@ -6,14 +6,18 @@ using System.Xml;
 public class ItemData
 {
     public int id;
+    public string name;
     public CommonData.ITEM_TYPE itemtype;
     public string img;
+    public int value;
 
     public ItemData(XmlNode node)
     {
         id = int.Parse(node.Attributes.GetNamedItem("id").Value);
+        name = node.Attributes.GetNamedItem("name").Value;
         SetItemType(node.Attributes.GetNamedItem("type").Value);
         img = node.Attributes.GetNamedItem("img").Value;
+        value = int.Parse(node.Attributes.GetNamedItem("value").Value);
     }
 
     private void SetItemType(string type)
