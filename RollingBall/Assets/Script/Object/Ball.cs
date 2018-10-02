@@ -10,7 +10,7 @@ public class Ball : InGameObject
     private BallData Data = null;
     private StageData StageData = null;
     private float RadiusDistance = 0;
-    private float MoveSpeed = 0;
+    public float MoveSpeed { get; private set; }
 
     public bool BallMoveRightDir = true;
 

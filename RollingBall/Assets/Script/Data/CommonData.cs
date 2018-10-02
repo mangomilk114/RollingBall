@@ -35,5 +35,4 @@ public class CommonData
     public static int ITEM_DEGREE_GAP = 15;
     public static float IN_GAMEOBJECT_CRASH_DEGREE_GAP = 10;
 
-
 }

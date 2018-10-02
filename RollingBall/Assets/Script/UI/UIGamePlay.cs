@@ -86,7 +86,7 @@ public class UIGamePlay : MonoBehaviour
     {
         StringBuilder info = new StringBuilder();
         info.AppendLine(string.Format("현재 스테이지 : {0}", GamePlayManager.Instance.CurrStageData.id));
-        info.AppendLine(string.Format("현재 공 속도 : {0:f2}", GamePlayManager.Instance.CurrStageData.start_speed));
+        info.AppendLine(string.Format("현재 공 속도 : {0:f2}", GamePlayManager.Instance.PlayBall.MoveSpeed));
         info.AppendLine(string.Format("현재 공 방향 : {0}", GamePlayManager.Instance.CurrStageData.start_rightdir ? "오른쪽" : "왼쪽"));
         info.AppendLine(string.Format("현재 체력 : {0} / {1}", GamePlayManager.Instance.HealthPoint, GamePlayManager.Instance.MaxHealthPoint));
         info.AppendLine(string.Format("현재 바퀴수 : {0}", GamePlayManager.Instance.TurnCount));

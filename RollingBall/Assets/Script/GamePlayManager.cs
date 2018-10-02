@@ -272,38 +272,50 @@ public class GamePlayManager : MonoBehaviour
         return false;
     }
 
-    public bool HaveItem(Item item)
+    public void HaveItem(Item item)
     {
-        var removeEnable = RemoveItem(item);
-
-        if(removeEnable)
+        switch (item.ItemType)
         {
-            switch (item.ItemType)
-            {
-                case CommonData.ITEM_TYPE.STAR:
-                    break;
-                case CommonData.ITEM_TYPE.SPEED_UP:
-                    PlayBall.PlusMoveSpeed(5f);
-                    break;
-                case CommonData.ITEM_TYPE.SPEED_DOWN:
-                    PlayBall.PlusMoveSpeed(-5f);
-                    break;
-                case CommonData.ITEM_TYPE.BOMB:
-                    MinusHealthPoint(10);
-                    break;
-                case CommonData.ITEM_TYPE.COIN:
-                    break;
-                case CommonData.ITEM_TYPE.POTION:
-                    PlusHealthPoint(10);
-                    break;
-                default:
-                    break;
-            }
+            case CommonData.ITEM_TYPE.POTION:
+                PlusHealthPoint(10);
+                break;
+            case CommonData.ITEM_TYPE.COIN:
+                break;
+            case CommonData.ITEM_TYPE.STAR:
+                break;
+            case CommonData.ITEM_TYPE.SPEED_UP:
+                break;
+            case CommonData.ITEM_TYPE.SPEED_DOWN:
+                break;
+            case CommonData.ITEM_TYPE.BOMB:
+                break;
+            default:
+                break;
         }
-
-        return removeEnable;
+        item.ResetItem();
     }
-
+    public void PassItem(Item item)
+    {
+        switch (item.ItemType)
+        {
+            case CommonData.ITEM_TYPE.STAR:
+            case CommonData.ITEM_TYPE.COIN:
+            case CommonData.ITEM_TYPE.POTION:
+                return;
+            case CommonData.ITEM_TYPE.SPEED_UP:
+                PlayBall.PlusMoveSpeed(5f);
+                break;
+            case CommonData.ITEM_TYPE.SPEED_DOWN:
+                PlayBall.PlusMoveSpeed(-5f);
+                break;
+            case CommonData.ITEM_TYPE.BOMB:
+                MinusHealthPoint(10);
+                break;
+            default:
+                break;
+        }
+        item.ResetItem();
+    }
     public void SetStageClearCheck()
     {
         bool stageClear = true;
@@ -350,49 +362,51 @@ public class GamePlayManager : MonoBehaviour
 
     public void BallCrashAcion(bool touch)
     {
+        bool minusHealthPointEnable = true;
         var crashObject = GetBallToObjectCrashObject();
         if (crashObject == null)
         {
             BallCrashType = CommonData.OBJECT_TYPE.NONE;
-            return;
         }
-
-
-        switch (crashObject.Type)
+        else
         {
-            case CommonData.OBJECT_TYPE.ITEM:
-                var itemObj = crashObject.GetComponent<Item>();
-                if (touch)
-                {
-                    var removeEnable = HaveItem(itemObj);
-                }
-                else
-                {
-                    // 통과되면 난리나는 애들
-                }
-                break;
-            case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
-                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_LEFT)
-                    return;
-                if (PlayBall.BallMoveRightDir)
-                    SetStageClearCheck();
-                break;
-            case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
-                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_RIGHT)
-                    return;
-                if (PlayBall.BallMoveRightDir == false)
-                    SetStageClearCheck();
-                break;
-            case CommonData.OBJECT_TYPE.STAGE_START:
-                if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_START)
-                    return;
-                PassStartPos();
-                break;
-            default:
-                break;
-        }
+            switch (crashObject.Type)
+            {
+                case CommonData.OBJECT_TYPE.ITEM:
+                    minusHealthPointEnable = false;
+                    var itemObj = crashObject.GetComponent<Item>();
+                    if (touch)
+                        HaveItem(itemObj);
+                    else
+                        PassItem(itemObj);
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
+                    if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_LEFT)
+                        return;
+                    if (PlayBall.BallMoveRightDir)
+                        SetStageClearCheck();
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
+                    if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_END_RIGHT)
+                        return;
+                    if (PlayBall.BallMoveRightDir == false)
+                        SetStageClearCheck();
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_START:
+                    if (BallCrashType == CommonData.OBJECT_TYPE.STAGE_START)
+                        return;
+                    PassStartPos();
+                    break;
+                default:
+                    break;
+            }
 
-        BallCrashType = crashObject.Type;
+            BallCrashType = crashObject.Type;
+        }
+        
+
+        if (touch && minusHealthPointEnable)
+            MinusHealthPoint(10);
     }
 
     private float GetCenterToBallAngle()
@@ -459,7 +473,7 @@ public class GamePlayManager : MonoBehaviour
             crashObject = ItemObjectList[minGapIndex];
         }
 
-        if(crashObject != null)
+        if(crashObject == null)
         {
             float startCheckGap = GetBallToObjectAngleGap(ballAngle, BallStart);
             if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
@@ -468,13 +482,13 @@ public class GamePlayManager : MonoBehaviour
             if (PlayBall.BallMoveRightDir)
             {
                 float LeftCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Left);
-                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= LeftCheckGap)
                     crashObject = BallEndCheck_Left;
             }
             else
             {
                 float RightCheckGap = GetBallToObjectAngleGap(ballAngle, BallEndCheck_Right);
-                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= RightCheckGap)
                     crashObject = BallEndCheck_Right;
             }
         }
