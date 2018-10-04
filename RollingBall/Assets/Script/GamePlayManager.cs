@@ -360,6 +360,7 @@ public class GamePlayManager : MonoBehaviour
         {
             TurnCount++;
             MinusHealthPoint(CommonData.TURN_TRACK_MINUS_HP);
+            PlayBall.SetStageData(CurrStageData);
         }
             
     }

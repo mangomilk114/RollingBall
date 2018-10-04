@@ -21,7 +21,7 @@ public class GManager : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 50;
         Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
 
         PlayerData.Instance.Initialize();
