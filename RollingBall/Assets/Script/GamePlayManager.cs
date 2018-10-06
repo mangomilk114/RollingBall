@@ -76,7 +76,7 @@ public class GamePlayManager : MonoBehaviour
         BackgroundImg.sprite = (Sprite)Resources.Load(bgData.img, typeof(Sprite));
 
         StageIndex = PlayerData.Instance.StageIndex;
-        CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+        CurrStageData = GetStageData();
         HealthPoint = CommonData.DEFAULT_JELLY_HEALTH_POINT;
         MaxHealthPoint = CommonData.MAX_JELLY_HEALTH_POINT;
         PlayJellyHero.Initialize(CenterPos, PlayerData.Instance.JellyCharId);
@@ -91,7 +91,9 @@ public class GamePlayManager : MonoBehaviour
         CurrGameState = GAME_STATE.MAIN;
         ResetGamePlay();
         PlayJellyHero.SetStageData(CurrStageData);
+        StopAllCoroutines();
         StartCoroutine(CoGameUpdate());
+        GamePlayUI.GameMain();
     }
 
     public void GameReady()
@@ -101,11 +103,13 @@ public class GamePlayManager : MonoBehaviour
         ResetGamePlay();
         SetStage();
         PlayJellyHero.ResetPos();
+        GamePlayUI.GameReady();
     }
 
     public void GamePlay()
     {
         CurrGameState = GAME_STATE.PLAY;
+        GamePlayUI.GamePlay();
     }
 
     public void GameEnd()
@@ -113,6 +117,7 @@ public class GamePlayManager : MonoBehaviour
         CurrGameState = GAME_STATE.END;
         ResetStage();
         PlayJellyHero.ResetPos();
+        GamePlayUI.GameEnd();
     }
 
     public void GamePause()
@@ -137,10 +142,9 @@ public class GamePlayManager : MonoBehaviour
                 break;
             case GAME_STATE.PLAY:
                 GamePlayingTouch = true;
-                PlayJellyHero.Anim.SetTrigger("Jump");
                 break;
             case GAME_STATE.END:
-                GameReady();
+                GameMain();
                 break;
             case GAME_STATE.PAUSE:
                 break;
@@ -154,8 +158,6 @@ public class GamePlayManager : MonoBehaviour
     {
         while (true)
         {
-            GamePlayUI.UpdateUI();
-
             if (CurrGameState == GAME_STATE.READY ||
                 CurrGameState == GAME_STATE.END ||
                 CurrGameState == GAME_STATE.PAUSE)
@@ -302,7 +304,7 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.SAW:
                 {
                     float gap = GetTargetToObjectAngleGap(GetCenterToJellyHeroAngle(), item);
-                    if (gap < 1f)
+                    if (gap < 2f)
                     {
                         MinusHealthPoint(item.Data.value);
                         item.ResetItem();
@@ -332,15 +334,28 @@ public class GamePlayManager : MonoBehaviour
         if (stageClear)
         {
             StageIndex++;
-
-            // TODO 환웅 임시
-            if (DataManager.Instance.StageDataList.Count <= StageIndex)
-                StageIndex = 0;
-
             PlayerData.Instance.SetStageIndex(StageIndex);
-            CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+            CurrStageData = GetStageData();
+            GamePlayUI.ChangeStageCount();
             SetStage();
         }
+    }
+
+    public StageData GetStageData()
+    {
+        StageData data = null;  
+        if (DataManager.Instance.StageDataList.Count <= StageIndex)
+        {
+            data = DataManager.Instance.StageDataList[DataManager.Instance.StageDataList.Count - 1];
+            data.start_speed += 0.2f;
+            data.start_rightdir = Random.Range(0, 2) == 0 ? true : false;
+        }
+        else
+        {
+            data = DataManager.Instance.StageDataList[StageIndex];
+        }
+
+        return data;
     }
 
     public void PassStartPos()

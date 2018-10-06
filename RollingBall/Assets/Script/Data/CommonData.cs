@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CommonData
 {
@@ -47,5 +48,19 @@ public class CommonData
         }
 
         return ITEM_TYPE.NONE;
+    }
+
+    static public void SetImageFile(string fileName, ref Image img, bool sizeAuto = true)
+    {
+        var imgSprite = (Sprite)Resources.Load(fileName, typeof(Sprite));
+        if (imgSprite == null)
+            return;
+
+        if (sizeAuto)
+        {
+            RectTransform rt = img.GetComponent<RectTransform>();
+            rt.sizeDelta = imgSprite.rect.size;
+        }
+        img.sprite = imgSprite;
     }
 }
