@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<Item id = "1" name="CHEST" type="CHEST" img="SpeedUp" value="5"/>
-	<Item id = "2" name="SAW" type="SAW" img="SpeedDown" value="5"/>
+	<Item id = "1" name="CHEST" type="CHEST" img="SpeedUp" value="1"/>
+	<Item id = "2" name="SAW" type="SAW" img="SpeedDown" value="1"/>
 </Datas> 

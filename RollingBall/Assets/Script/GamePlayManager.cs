@@ -39,6 +39,8 @@ public class GamePlayManager : MonoBehaviour
     public bool IsStageClear = false;
     [System.NonSerialized]
     public int TurnCount = 1;
+    [System.NonSerialized]
+    public int HaveChestCount = 0;
 
     private UIGamePlay GamePlayUI;
 
@@ -50,6 +52,8 @@ public class GamePlayManager : MonoBehaviour
     public InGameObject JellyHeroEndCheck_Left;
     public InGameObject JellyHeroEndCheck_Right;
     public CommonData.OBJECT_TYPE JellyHeroCrashType = CommonData.OBJECT_TYPE.NONE;
+    public List<JellyHPChar> JellyHPCharObjectList = new List<JellyHPChar>();
+    public List<GameObject> ChestObjectList = new List<GameObject>();
 
     void Start()
     {
@@ -92,6 +96,7 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameReady()
     {
+        JellyHeroCrashType = CommonData.OBJECT_TYPE.STAGE_START;
         CurrGameState = GAME_STATE.READY;
         ResetGamePlay();
         SetStage();
@@ -161,21 +166,6 @@ public class GamePlayManager : MonoBehaviour
                 JellyHeroCrashAcion(GamePlayingTouch);
             GamePlayingTouch = false;
             PlayJellyHero.UpdateJellyHero(Time.deltaTime);
-
-            
-
-            //PlayBall.BallTouchAcion(BallAction);
-            //BallAction = false;
-
-
-            //StageClearCheck();
-            //StageStart();
-
-            //if (PlayBall.GetHealthPoint() < 0)
-            //    GameEnd();
-
-            //StageText.text = string.Format("Stage - {0}", StageCount);
-
             yield return null;
         }
     }
@@ -186,11 +176,13 @@ public class GamePlayManager : MonoBehaviour
         HealthPoint += value;
         if (HealthPoint >= MaxHealthPoint)
             HealthPoint = MaxHealthPoint;
+        ChangeJellyHPCharCount();
     }
 
     public void MinusHealthPoint(int value)
     {
         HealthPoint -= value;
+        ChangeJellyHPCharCount();
         if (HealthPoint <= 0)
             GameEnd();
     }
@@ -201,6 +193,14 @@ public class GamePlayManager : MonoBehaviour
         {
             ItemObjectList[i].ResetItem();
         }
+
+        for (int i = 0; i < ChestObjectList.Count; i++)
+        {
+            ChestObjectList[i].gameObject.SetActive(false);
+        }
+
+        HaveChestCount = 0;
+        ChangeChestCount();
     }
 
     public void SetStage()
@@ -282,6 +282,8 @@ public class GamePlayManager : MonoBehaviour
         switch (item.ItemType)
         {
             case CommonData.ITEM_TYPE.CHEST:
+                HaveChestCount++;
+                ChangeChestCount();
                 break;
             case CommonData.ITEM_TYPE.SAW:
                 break;
@@ -297,6 +299,7 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.CHEST:
                 return;
             case CommonData.ITEM_TYPE.SAW:
+                Debug.LogFormat("MinusHealthPoint PassItem");
                 MinusHealthPoint(item.Data.value);
                 break;
             default:
@@ -336,7 +339,7 @@ public class GamePlayManager : MonoBehaviour
     {
         if (IsStageClear)
         {
-            HealthPoint = CommonData.DEFAULT_JELLY_HEALTH_POINT;
+            PlusHealthPoint(CommonData.DEFAULT_JELLY_HEALTH_POINT);
             PlayJellyHero.SetStageData(CurrStageData);
             IsStageClear = false;
             TurnCount = 0;
@@ -369,7 +372,11 @@ public class GamePlayManager : MonoBehaviour
                     if (touch)
                         HaveItem(itemObj);
                     else
+                    {
+                        if (JellyHeroCrashType == crashObject.Type)
+                            return;
                         PassItem(itemObj);
+                    } 
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
                     if (JellyHeroCrashType == CommonData.OBJECT_TYPE.STAGE_END_LEFT)
@@ -394,10 +401,12 @@ public class GamePlayManager : MonoBehaviour
 
             JellyHeroCrashType = crashObject.Type;
         }
-        
 
         if (touch && minusHealthPointEnable)
+        {
+            Debug.LogFormat("MinusHealthPoint touch && minusHealthPointEnable");
             MinusHealthPoint(CommonData.TOUCH_MINUS_HP);
+        }
     }
 
     private float GetCenterToJellyHeroAngle()
@@ -492,5 +501,22 @@ public class GamePlayManager : MonoBehaviour
         
 
         return crashObject;
+    }
+
+
+    public void ChangeJellyHPCharCount()
+    {
+        for (int i = 0; i < JellyHPCharObjectList.Count; i++)
+        {
+            JellyHPCharObjectList[i].gameObject.SetActive(HealthPoint > i);
+        }
+    }
+
+    public void ChangeChestCount()
+    {
+        for (int i = 0; i < ChestObjectList.Count; i++)
+        {
+            ChestObjectList[i].gameObject.SetActive(HaveChestCount > i);
+        }
     }
 }

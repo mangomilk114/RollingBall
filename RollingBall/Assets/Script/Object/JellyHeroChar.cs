@@ -34,6 +34,7 @@ public class JellyHeroChar : InGameObject
         StartMoveSpeed = StageData.start_speed;
         MoveSpeed = StageData.start_speed;
         JellyMoveRightDir = StageData.start_rightdir;
+        gameObject.transform.localScale = new Vector3(JellyMoveRightDir ? 1 : -1, 1, 1);
     }
 
     public void UpdateJellyHero(float time)
