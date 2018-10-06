@@ -91,7 +91,9 @@ public class GamePlayManager : MonoBehaviour
         CurrGameState = GAME_STATE.MAIN;
         ResetGamePlay();
         PlayJellyHero.SetStageData(CurrStageData);
+        StopAllCoroutines();
         StartCoroutine(CoGameUpdate());
+        GamePlayUI.GameMain();
     }
 
     public void GameReady()
@@ -101,11 +103,13 @@ public class GamePlayManager : MonoBehaviour
         ResetGamePlay();
         SetStage();
         PlayJellyHero.ResetPos();
+        GamePlayUI.GameReady();
     }
 
     public void GamePlay()
     {
         CurrGameState = GAME_STATE.PLAY;
+        GamePlayUI.GamePlay();
     }
 
     public void GameEnd()
@@ -113,6 +117,7 @@ public class GamePlayManager : MonoBehaviour
         CurrGameState = GAME_STATE.END;
         ResetStage();
         PlayJellyHero.ResetPos();
+        GamePlayUI.GameEnd();
     }
 
     public void GamePause()
@@ -137,10 +142,9 @@ public class GamePlayManager : MonoBehaviour
                 break;
             case GAME_STATE.PLAY:
                 GamePlayingTouch = true;
-                PlayJellyHero.Anim.SetTrigger("Jump");
                 break;
             case GAME_STATE.END:
-                GameReady();
+                GameMain();
                 break;
             case GAME_STATE.PAUSE:
                 break;
@@ -154,8 +158,6 @@ public class GamePlayManager : MonoBehaviour
     {
         while (true)
         {
-            GamePlayUI.UpdateUI();
-
             if (CurrGameState == GAME_STATE.READY ||
                 CurrGameState == GAME_STATE.END ||
                 CurrGameState == GAME_STATE.PAUSE)
@@ -339,6 +341,7 @@ public class GamePlayManager : MonoBehaviour
 
             PlayerData.Instance.SetStageIndex(StageIndex);
             CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+            GamePlayUI.ChangeStageCount();
             SetStage();
         }
     }

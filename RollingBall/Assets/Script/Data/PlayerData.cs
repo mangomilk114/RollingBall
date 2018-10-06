@@ -27,6 +27,7 @@ public class PlayerData
         public int Score = 0;
         public int JellyCharId = 1;
         public int BackgroundId = 1;
+        public bool SoundEnable = true;
 
         public void Save()
         {
@@ -34,6 +35,7 @@ public class PlayerData
             Score = PlayerData.Instance.Score;
             JellyCharId = PlayerData.Instance.JellyCharId;
             BackgroundId = PlayerData.Instance.BackgroundId;
+            SoundEnable = PlayerData.Instance.SoundEnable;
         }
 
         public void Load()
@@ -42,6 +44,7 @@ public class PlayerData
             PlayerData.Instance.Score = Score;
             PlayerData.Instance.JellyCharId = JellyCharId;
             PlayerData.Instance.BackgroundId = BackgroundId;
+            PlayerData.Instance.SoundEnable = SoundEnable;
         }
     }
 
@@ -51,6 +54,7 @@ public class PlayerData
     public int Score = 0;
     public int JellyCharId = 1;
     public int BackgroundId = 1;
+    public bool SoundEnable = true;
 
     public void SaveFile()
     {
@@ -80,6 +84,7 @@ public class PlayerData
             Score = 0;
             JellyCharId = 1;
             BackgroundId = 1;
+            SoundEnable = true;
             SaveFile();
         }
     }
@@ -114,6 +119,12 @@ public class PlayerData
     public void PlusScore(int score)
     {
         Score += score;
+        SaveFile();
+    }
+
+    public void SetSoundEnable(bool enable)
+    {
+        SoundEnable = enable;
         SaveFile();
     }
 }
