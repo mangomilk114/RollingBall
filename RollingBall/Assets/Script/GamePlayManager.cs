@@ -304,7 +304,7 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.SAW:
                 {
                     float gap = GetTargetToObjectAngleGap(GetCenterToJellyHeroAngle(), item);
-                    if (gap < 1f)
+                    if (gap < 2f)
                     {
                         MinusHealthPoint(item.Data.value);
                         item.ResetItem();
