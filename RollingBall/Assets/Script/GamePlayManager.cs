@@ -137,6 +137,7 @@ public class GamePlayManager : MonoBehaviour
                 break;
             case GAME_STATE.PLAY:
                 GamePlayingTouch = true;
+                PlayJellyHero.Anim.SetTrigger("Jump");
                 break;
             case GAME_STATE.END:
                 GameReady();
@@ -299,13 +300,20 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.CHEST:
                 return;
             case CommonData.ITEM_TYPE.SAW:
-                Debug.LogFormat("MinusHealthPoint PassItem");
-                MinusHealthPoint(item.Data.value);
-                break;
+                {
+                    float gap = GetTargetToObjectAngleGap(GetCenterToJellyHeroAngle(), item);
+                    if (gap < 1f)
+                    {
+                        MinusHealthPoint(item.Data.value);
+                        item.ResetItem();
+                    }
+                    break;
+                }
+                
             default:
                 break;
         }
-        item.ResetItem();
+        
     }
     public void SetStageClearCheck()
     {
@@ -350,7 +358,6 @@ public class GamePlayManager : MonoBehaviour
             MinusHealthPoint(CommonData.TURN_TRACK_MINUS_HP);
             PlayJellyHero.SetStageData(CurrStageData);
         }
-            
     }
 
 
@@ -372,26 +379,22 @@ public class GamePlayManager : MonoBehaviour
                     if (touch)
                         HaveItem(itemObj);
                     else
-                    {
-                        if (JellyHeroCrashType == crashObject.Type)
-                            return;
                         PassItem(itemObj);
-                    } 
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
-                    if (JellyHeroCrashType == CommonData.OBJECT_TYPE.STAGE_END_LEFT)
+                    if (JellyHeroCrashType == crashObject.Type)
                         return;
                     if (PlayJellyHero.JellyMoveRightDir)
                         SetStageClearCheck();
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
-                    if (JellyHeroCrashType == CommonData.OBJECT_TYPE.STAGE_END_RIGHT)
+                    if (JellyHeroCrashType == crashObject.Type)
                         return;
                     if (PlayJellyHero.JellyMoveRightDir == false)
                         SetStageClearCheck();
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_START:
-                    if (JellyHeroCrashType == CommonData.OBJECT_TYPE.STAGE_START)
+                    if (JellyHeroCrashType == crashObject.Type)
                         return;
                     PassStartPos();
                     break;
@@ -404,7 +407,6 @@ public class GamePlayManager : MonoBehaviour
 
         if (touch && minusHealthPointEnable)
         {
-            Debug.LogFormat("MinusHealthPoint touch && minusHealthPointEnable");
             MinusHealthPoint(CommonData.TOUCH_MINUS_HP);
         }
     }
