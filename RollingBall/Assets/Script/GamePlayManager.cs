@@ -76,7 +76,7 @@ public class GamePlayManager : MonoBehaviour
         BackgroundImg.sprite = (Sprite)Resources.Load(bgData.img, typeof(Sprite));
 
         StageIndex = PlayerData.Instance.StageIndex;
-        CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+        CurrStageData = GetStageData();
         HealthPoint = CommonData.DEFAULT_JELLY_HEALTH_POINT;
         MaxHealthPoint = CommonData.MAX_JELLY_HEALTH_POINT;
         PlayJellyHero.Initialize(CenterPos, PlayerData.Instance.JellyCharId);
@@ -334,16 +334,28 @@ public class GamePlayManager : MonoBehaviour
         if (stageClear)
         {
             StageIndex++;
-
-            // TODO 환웅 임시
-            if (DataManager.Instance.StageDataList.Count <= StageIndex)
-                StageIndex = 0;
-
             PlayerData.Instance.SetStageIndex(StageIndex);
-            CurrStageData = DataManager.Instance.StageDataList[StageIndex];
+            CurrStageData = GetStageData();
             GamePlayUI.ChangeStageCount();
             SetStage();
         }
+    }
+
+    public StageData GetStageData()
+    {
+        StageData data = null;  
+        if (DataManager.Instance.StageDataList.Count <= StageIndex)
+        {
+            data = DataManager.Instance.StageDataList[DataManager.Instance.StageDataList.Count - 1];
+            data.start_speed += 0.2f;
+            data.start_rightdir = Random.Range(0, 2) == 0 ? true : false;
+        }
+        else
+        {
+            data = DataManager.Instance.StageDataList[StageIndex];
+        }
+
+        return data;
     }
 
     public void PassStartPos()
