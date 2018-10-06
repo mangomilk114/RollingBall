@@ -22,6 +22,7 @@ public class DataManager
     public Dictionary<int, JellyData> JellyHeroDataDic = new Dictionary<int, JellyData>();
     public List<StageData> StageDataList = new List<StageData>();
     public Dictionary<int, StagePresetData> StagePresetDataDic = new Dictionary<int, StagePresetData>();
+    public Dictionary<int, BackgroundData> BackgroundDataDic = new Dictionary<int, BackgroundData>();
     public Dictionary<CommonData.ITEM_TYPE, ItemData> ItemDataDic = new Dictionary<CommonData.ITEM_TYPE, ItemData>();
     private List<KeyValuePair<string, string>> LoadingDataXmlList = new List<KeyValuePair<string, string>>();
 
@@ -33,6 +34,7 @@ public class DataManager
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Stage", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Item", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("StagePreset", "Datas"));
+            LoadingDataXmlList.Add(new KeyValuePair<string, string>("Background", "Datas"));
         }
 
         for (int i = 0; i < LoadingDataXmlList.Count; i++)
@@ -82,6 +84,18 @@ public class DataManager
                     {
                         var data = new StagePresetData(child);
                         StagePresetDataDic.Add(data.id, data);
+                    }
+                }
+            }
+
+            else if (xmlName == "Background")
+            {
+                foreach (XmlNode node in list)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        var data = new BackgroundData(child);
+                        BackgroundDataDic.Add(data.id, data);
                     }
                 }
             }

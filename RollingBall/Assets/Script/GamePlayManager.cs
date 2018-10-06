@@ -43,6 +43,7 @@ public class GamePlayManager : MonoBehaviour
     private UIGamePlay GamePlayUI;
 
     public JellyHeroChar PlayJellyHero;
+    public SpriteRenderer BackgroundImg;
     public Transform CenterPos;
     public List<Item> ItemObjectList = new List<Item>();
     public InGameObject JellyHeroStart;
@@ -67,11 +68,15 @@ public class GamePlayManager : MonoBehaviour
 
     public void ResetGamePlay()
     {
+        var bgData = DataManager.Instance.BackgroundDataDic[PlayerData.Instance.BackgroundId];
+        BackgroundImg.sprite = (Sprite)Resources.Load(bgData.img, typeof(Sprite));
+
         StageIndex = PlayerData.Instance.StageIndex;
         CurrStageData = DataManager.Instance.StageDataList[StageIndex];
         HealthPoint = CommonData.DEFAULT_JELLY_HEALTH_POINT;
         MaxHealthPoint = CommonData.MAX_JELLY_HEALTH_POINT;
-        PlayJellyHero.Initialize(CenterPos, 1);
+        PlayJellyHero.Initialize(CenterPos, PlayerData.Instance.JellyCharId);
+        
         GamePlayingTouch = false;
         IsStageClear = false;
         ResetStage();
@@ -274,47 +279,29 @@ public class GamePlayManager : MonoBehaviour
 
     public void HaveItem(Item item)
     {
-        //switch (item.ItemType)
-        //{
-        //    case CommonData.ITEM_TYPE.POTION:
-        //        PlusHealthPoint(item.Data.value);
-        //        break;
-        //    case CommonData.ITEM_TYPE.COIN:
-        //        PlayerData.Instance.PlusScore(item.Data.value);
-        //        break;
-        //    case CommonData.ITEM_TYPE.CHEST:
-        //        break;
-        //    case CommonData.ITEM_TYPE.SPEED_UP:
-        //        break;
-        //    case CommonData.ITEM_TYPE.SPEED_DOWN:
-        //        break;
-        //    case CommonData.ITEM_TYPE.BOMB:
-        //        break;
-        //    default:
-        //        break;
-        //}
+        switch (item.ItemType)
+        {
+            case CommonData.ITEM_TYPE.CHEST:
+                break;
+            case CommonData.ITEM_TYPE.SAW:
+                break;
+            default:
+                break;
+        }
         item.ResetItem();
     }
     public void PassItem(Item item)
     {
-        //switch (item.ItemType)
-        //{
-        //    case CommonData.ITEM_TYPE.CHEST:
-        //    case CommonData.ITEM_TYPE.COIN:
-        //    case CommonData.ITEM_TYPE.POTION:
-        //        return;
-        //    case CommonData.ITEM_TYPE.SPEED_UP:
-        //        PlayJellyHero.PlusMoveSpeed(item.Data.value);
-        //        break;
-        //    case CommonData.ITEM_TYPE.SPEED_DOWN:
-        //        PlayJellyHero.PlusMoveSpeed(-item.Data.value);
-        //        break;
-        //    case CommonData.ITEM_TYPE.BOMB:
-        //        MinusHealthPoint(item.Data.value);
-        //        break;
-        //    default:
-        //        break;
-        //}
+        switch (item.ItemType)
+        {
+            case CommonData.ITEM_TYPE.CHEST:
+                return;
+            case CommonData.ITEM_TYPE.SAW:
+                MinusHealthPoint(item.Data.value);
+                break;
+            default:
+                break;
+        }
         item.ResetItem();
     }
     public void SetStageClearCheck()

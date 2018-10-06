@@ -25,17 +25,23 @@ public class PlayerData
     {
         public int StageIndex = 0;
         public int Score = 0;
+        public int JellyCharId = 1;
+        public int BackgroundId = 1;
 
         public void Save()
         {
             StageIndex = PlayerData.Instance.StageIndex;
             Score = PlayerData.Instance.Score;
+            JellyCharId = PlayerData.Instance.JellyCharId;
+            BackgroundId = PlayerData.Instance.BackgroundId;
         }
 
         public void Load()
         {
             PlayerData.Instance.StageIndex = StageIndex;
             PlayerData.Instance.Score = Score;
+            PlayerData.Instance.JellyCharId = JellyCharId;
+            PlayerData.Instance.BackgroundId = BackgroundId;
         }
     }
 
@@ -43,6 +49,8 @@ public class PlayerData
 
     public int StageIndex = 0;
     public int Score = 0;
+    public int JellyCharId = 1;
+    public int BackgroundId = 1;
 
     public void SaveFile()
     {
@@ -70,6 +78,8 @@ public class PlayerData
         {
             StageIndex = 0;
             Score = 0;
+            JellyCharId = 1;
+            BackgroundId = 1;
             SaveFile();
         }
     }

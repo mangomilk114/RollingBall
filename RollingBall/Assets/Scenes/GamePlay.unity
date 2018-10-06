@@ -1258,6 +1258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ded282e9727ef4faaddecf6e650578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 4
 --- !u!1 &1202042280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,6 +1415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayJellyHero: {fileID: 491669918}
+  BackgroundImg: {fileID: 2049680274}
   CenterPos: {fileID: 1314569776}
   ItemObjectList:
   - {fileID: 971750429}
@@ -1482,6 +1484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ded282e9727ef4faaddecf6e650578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 5
 --- !u!1001 &1491451197
 Prefab:
   m_ObjectHideFlags: 0
@@ -1525,6 +1528,11 @@ Prefab:
       propertyPath: m_Name
       value: Item (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 95678752191934140, guid: c2d1582f001a6bc40a9abdba50b75e38,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 242af5e51d33f0e4aba2c20603b9badd, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2d1582f001a6bc40a9abdba50b75e38, type: 2}
   m_IsPrefabAsset: 0
@@ -1688,6 +1696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ded282e9727ef4faaddecf6e650578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 3
 --- !u!1 &2049680272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1760,6 +1769,6 @@ SpriteRenderer:
   m_Size: {x: 9, y: 9}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

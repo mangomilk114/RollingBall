@@ -33,10 +33,10 @@ public class Item : InGameObject
             case CommonData.ITEM_TYPE.NONE:
                 break;
             case CommonData.ITEM_TYPE.CHEST:
-                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Chest.controller", typeof(RuntimeAnimatorController));
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Chest/Chest", typeof(RuntimeAnimatorController));
                 break;
             case CommonData.ITEM_TYPE.SAW:
-                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Saw.controller", typeof(RuntimeAnimatorController));
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Saw/Saw", typeof(RuntimeAnimatorController));
                 break;
             default:
                 break;

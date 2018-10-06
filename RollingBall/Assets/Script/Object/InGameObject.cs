@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class InGameObject : MonoBehaviour
 {
-    [System.NonSerialized]
     public CommonData.OBJECT_TYPE Type;
     [System.NonSerialized]
     public float Degree;
