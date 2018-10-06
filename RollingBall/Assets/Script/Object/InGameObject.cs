@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class InGameObject : MonoBehaviour
 {
+    [System.NonSerialized]
     public CommonData.OBJECT_TYPE Type;
+    [System.NonSerialized]
     public float Degree;
 
     public void SetPlace(float degree)
@@ -14,5 +16,7 @@ public class InGameObject : MonoBehaviour
         float x = CommonData.TRACK_RADIUS_DISTANCE * Mathf.Sin(dRad);
         float y = CommonData.TRACK_RADIUS_DISTANCE * Mathf.Cos(dRad);
         gameObject.transform.position = new Vector3(x, y);
+
+        gameObject.transform.rotation = Quaternion.Euler(0, 0, (float)(Degree + 180));
     }
 }

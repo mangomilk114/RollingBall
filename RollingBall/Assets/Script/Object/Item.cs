@@ -4,30 +4,42 @@ using UnityEngine;
 
 public class Item : InGameObject
 {
-    public string ItemName = "";
+    [System.NonSerialized]
     public CommonData.ITEM_TYPE ItemType = CommonData.ITEM_TYPE.NONE;
-    public SpriteRenderer Img;
+    [System.NonSerialized]
     public int UniqueIndex = -1;
+    [System.NonSerialized]
     public ItemData Data;
+    public Animator Anim;
 
-    public void ResetItem()
+    public virtual void ResetItem()
     {
         Type = CommonData.OBJECT_TYPE.ITEM;
         gameObject.SetActive(false);
         ItemType = CommonData.ITEM_TYPE.NONE;
-        Img.sprite = null;
         UniqueIndex = -1;
-        ItemName = "";
+        Anim.Rebind();
     }
 
-    public void SetData(string name, int uniqueIndex)
+    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex)
     {
         gameObject.SetActive(true);
         UniqueIndex = uniqueIndex;
-        Data = DataManager.Instance.ItemDataDic[name];
-        ItemName = Data.name;
-
+        Data = DataManager.Instance.ItemDataDic[type];
         ItemType = Data.itemtype;
-        Img.sprite = (Sprite)Resources.Load(Data.img, typeof(Sprite));
+
+        switch (type)
+        {
+            case CommonData.ITEM_TYPE.NONE:
+                break;
+            case CommonData.ITEM_TYPE.CHEST:
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Chest.controller", typeof(RuntimeAnimatorController));
+                break;
+            case CommonData.ITEM_TYPE.SAW:
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Saw.controller", typeof(RuntimeAnimatorController));
+                break;
+            default:
+                break;
+        }
     }
 }

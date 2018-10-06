@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<StagePreset id = "1" object_1="STAR, 3" object_2="SPEED_UP_LV1, 1" object_3="SPEED_DOWN_LV1, 1" object_4="BOMB_LV1, 1" object_5="" object_6="POTION_LV1, 1" />
+	<StagePreset id = "1" object_1="STAR, 3" object_2="BOMB_LV1, 1" object_3="" object_4="" object_5="" object_6="" />
 </Datas> 

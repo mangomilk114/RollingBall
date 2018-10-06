@@ -19,17 +19,17 @@ public class DataManager
         }
     }
 
-    public Dictionary<int, BallData> BallDataDic = new Dictionary<int, BallData>();
+    public Dictionary<int, JellyData> JellyHeroDataDic = new Dictionary<int, JellyData>();
     public List<StageData> StageDataList = new List<StageData>();
     public Dictionary<int, StagePresetData> StagePresetDataDic = new Dictionary<int, StagePresetData>();
-    public Dictionary<string, ItemData> ItemDataDic = new Dictionary<string, ItemData>();
+    public Dictionary<CommonData.ITEM_TYPE, ItemData> ItemDataDic = new Dictionary<CommonData.ITEM_TYPE, ItemData>();
     private List<KeyValuePair<string, string>> LoadingDataXmlList = new List<KeyValuePair<string, string>>();
 
     public IEnumerator LoadingData()
     {
         if (LoadingDataXmlList.Count <= 0)
         {
-            LoadingDataXmlList.Add(new KeyValuePair<string, string>("Ball", "Datas"));
+            LoadingDataXmlList.Add(new KeyValuePair<string, string>("Jelly", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Stage", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("Item", "Datas"));
             LoadingDataXmlList.Add(new KeyValuePair<string, string>("StagePreset", "Datas"));
@@ -41,14 +41,14 @@ public class DataManager
             XmlNodeList list = GetXmlNodeList(LoadingDataXmlList[i].Key, LoadingDataXmlList[i].Value);
 
 
-            if (xmlName == "Ball")
+            if (xmlName == "Jelly")
             {
                 foreach (XmlNode node in list)
                 {
                     foreach (XmlNode child in node.ChildNodes)
                     {
-                        var data = new BallData(child);
-                        BallDataDic.Add(data.id, data);
+                        var data = new JellyData(child);
+                        JellyHeroDataDic.Add(data.id, data);
                     }
                 }
             }
@@ -70,7 +70,7 @@ public class DataManager
                     foreach (XmlNode child in node.ChildNodes)
                     {
                         var data = new ItemData(child);
-                        ItemDataDic.Add(data.name, data);
+                        ItemDataDic.Add(data.itemtype, data);
                     }
                 }
             }

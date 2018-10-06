@@ -6,7 +6,7 @@ using System.Xml;
 public class StagePresetData
 {
     public int id;
-    private List<KeyValuePair<string, int>> itemTypeList = new List<KeyValuePair<string, int>>();
+    private List<KeyValuePair<CommonData.ITEM_TYPE, int>> itemTypeList = new List<KeyValuePair<CommonData.ITEM_TYPE, int>>();
 
     public StagePresetData(XmlNode node)
     {
@@ -19,19 +19,20 @@ public class StagePresetData
             {
                 var listStringArr = data.Split(',');
                 int count = int.Parse(listStringArr[1]);
-                itemTypeList.Add(new KeyValuePair<string, int>(listStringArr[0], count));
+                itemTypeList.Add(new KeyValuePair<CommonData.ITEM_TYPE, int>(CommonData.GetItemType(listStringArr[0]), count));
             }
         }
     }
 
-    public List<KeyValuePair<string, int>> GetPresetItemList()
+    public List<KeyValuePair<CommonData.ITEM_TYPE, int>> GetPresetItemList()
     {
-        List<KeyValuePair<string, int>> returnValue = new List<KeyValuePair<string, int>>();
+        List<KeyValuePair<CommonData.ITEM_TYPE, int>> returnValue = new List<KeyValuePair<CommonData.ITEM_TYPE, int>>();
         returnValue.InsertRange(0, itemTypeList);
 
-        int coinCraetePercent = Random.Range(0, 101);
-        if (coinCraetePercent < CommonData.COIN_ITEM_CRAETE_PERCENT)
-            returnValue.Add(new KeyValuePair<string, int>("COIN", Random.Range(0, 2)));
+        // TODO 환웅 코인??
+        //int coinCraetePercent = Random.Range(0, 101);
+        //if (coinCraetePercent < CommonData.COIN_ITEM_CRAETE_PERCENT)
+        //    returnValue.Add(new KeyValuePair<string, int>("COIN", Random.Range(0, 2)));
 
         return returnValue;
     }
