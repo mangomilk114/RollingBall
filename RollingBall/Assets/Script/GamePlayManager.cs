@@ -43,6 +43,8 @@ public class GamePlayManager : MonoBehaviour
     public int HaveChestCount = 0;
 
     private UIGamePlay GamePlayUI;
+    private InGameObject PrevCrashObejct = null;
+    private InGameObject CurrCrashObejct = null;
 
     public JellyHeroChar PlayJellyHero;
     public SpriteRenderer BackgroundImg;
@@ -98,7 +100,6 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameReady()
     {
-        JellyHeroCrashType = CommonData.OBJECT_TYPE.STAGE_START;
         CurrGameState = GAME_STATE.READY;
         ResetGamePlay();
         SetStage();
@@ -165,10 +166,27 @@ public class GamePlayManager : MonoBehaviour
                 yield return null;
                 continue;
             }
+
+            PrevCrashObejct = null;
+            CurrCrashObejct = null;
+
             if (CurrGameState == GAME_STATE.PLAY)
+            {
+                PrevCrashObejct = GetJellyHeroToObjectCrashObject();
+
                 JellyHeroCrashAcion(GamePlayingTouch);
-            GamePlayingTouch = false;
-            PlayJellyHero.UpdateJellyHero(Time.deltaTime);
+                GamePlayingTouch = false;
+                PlayJellyHero.UpdateJellyHero(Time.deltaTime);
+
+                CurrCrashObejct = GetJellyHeroToObjectCrashObject();
+
+                JellyHeroPassAcion();
+            }
+            else
+            {
+                PlayJellyHero.UpdateJellyHero(Time.deltaTime);
+            }
+                
             yield return null;
         }
     }
@@ -302,20 +320,12 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.CHEST:
                 return;
             case CommonData.ITEM_TYPE.SAW:
-                {
-                    float gap = GetTargetToObjectAngleGap(GetCenterToJellyHeroAngle(), item);
-                    if (gap < 2f)
-                    {
-                        MinusHealthPoint(item.Data.value);
-                        item.ResetItem();
-                    }
-                    break;
-                }
-                
+                MinusHealthPoint(item.Data.value);
+                break;
             default:
                 break;
         }
-        
+        item.ResetItem();
     }
     public void SetStageClearCheck()
     {
@@ -379,50 +389,70 @@ public class GamePlayManager : MonoBehaviour
     public void JellyHeroCrashAcion(bool touch)
     {
         bool minusHealthPointEnable = true;
-        var crashObject = GetJellyHeroToObjectCrashObject();
-        if (crashObject == null)
+        if(PrevCrashObejct != null)
         {
-            JellyHeroCrashType = CommonData.OBJECT_TYPE.NONE;
-        }
-        else
-        {
-            switch (crashObject.Type)
+            switch (PrevCrashObejct.Type)
             {
                 case CommonData.OBJECT_TYPE.ITEM:
                     minusHealthPointEnable = false;
-                    var itemObj = crashObject.GetComponent<Item>();
+                    var itemObj = PrevCrashObejct.GetComponent<Item>();
                     if (touch)
                         HaveItem(itemObj);
-                    else
-                        PassItem(itemObj);
+                    //else
+                    //    PassItem(itemObj);
                     break;
-                case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
-                    if (JellyHeroCrashType == crashObject.Type)
-                        return;
-                    if (PlayJellyHero.JellyMoveRightDir)
-                        SetStageClearCheck();
-                    break;
-                case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
-                    if (JellyHeroCrashType == crashObject.Type)
-                        return;
-                    if (PlayJellyHero.JellyMoveRightDir == false)
-                        SetStageClearCheck();
-                    break;
-                case CommonData.OBJECT_TYPE.STAGE_START:
-                    if (JellyHeroCrashType == crashObject.Type)
-                        return;
-                    PassStartPos();
-                    break;
+                //case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
+                //    if (JellyHeroCrashType == crashObject.Type)
+                //        return;
+                //    if (PlayJellyHero.JellyMoveRightDir)
+                //        SetStageClearCheck();
+                //    break;
+                //case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
+                //    if (JellyHeroCrashType == crashObject.Type)
+                //        return;
+                //    if (PlayJellyHero.JellyMoveRightDir == false)
+                //        SetStageClearCheck();
+                //    break;
+                //case CommonData.OBJECT_TYPE.STAGE_START:
+                //    if (JellyHeroCrashType == crashObject.Type)
+                //        return;
+                //    PassStartPos();
+                //    break;
                 default:
                     break;
             }
-
-            JellyHeroCrashType = crashObject.Type;
         }
 
         if (touch && minusHealthPointEnable)
         {
             MinusHealthPoint(CommonData.TOUCH_MINUS_HP);
+        }
+    }
+
+    public void JellyHeroPassAcion()
+    {
+        if (PrevCrashObejct != null && PrevCrashObejct != CurrCrashObejct)
+        {
+            switch (PrevCrashObejct.Type)
+            {
+                case CommonData.OBJECT_TYPE.ITEM:
+                    var itemObj = PrevCrashObejct.GetComponent<Item>();
+                    PassItem(itemObj);
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
+                    if (PlayJellyHero.JellyMoveRightDir)
+                        SetStageClearCheck();
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
+                    if (PlayJellyHero.JellyMoveRightDir == false)
+                        SetStageClearCheck();
+                    break;
+                case CommonData.OBJECT_TYPE.STAGE_START:
+                    PassStartPos();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
