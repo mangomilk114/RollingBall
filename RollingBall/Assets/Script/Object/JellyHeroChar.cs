@@ -59,11 +59,11 @@ public class JellyHeroChar : InGameObject
 
         if (CurrAngle >= 180 && PrevAngle >= 180)
         {
-            MoveSpeed = StartMoveSpeed * Mathf.Abs(((float)CurrAngle - 360f)) / 180f + 5.00f;
+            MoveSpeed = StartMoveSpeed * Mathf.Abs(((float)CurrAngle - 360f)) / 180f + StartMoveSpeed * 0.3f;
         }
         else
         {
-            MoveSpeed = StartMoveSpeed * (float)CurrAngle / 180f + 5.00f;
+            MoveSpeed = StartMoveSpeed * (float)CurrAngle / 180f + StartMoveSpeed * 0.3f;
 
         }
         Anim.speed = MoveSpeed / StartMoveSpeed;
