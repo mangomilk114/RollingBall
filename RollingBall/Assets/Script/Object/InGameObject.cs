@@ -10,7 +10,7 @@ public class InGameObject : MonoBehaviour
 
     public void SetPlace(float degree)
     {
-        Degree = degree;
+        Degree = degree % 360f;
         float dRad = -degree * 3.14f / 180f;
         float x = CommonData.TRACK_RADIUS_DISTANCE * Mathf.Sin(dRad);
         float y = CommonData.TRACK_RADIUS_DISTANCE * Mathf.Cos(dRad);

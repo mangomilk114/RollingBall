@@ -183,6 +183,14 @@ public class GamePlayManager : MonoBehaviour
                 CurrCrashObejct = GetJellyHeroToObjectCrashObject();
 
                 JellyHeroPassAcion();
+
+                for (int i = 0; i < ItemObjectList.Count; i++)
+                {
+                    if (ItemObjectList[i].UniqueIndex >= 0)
+                    {
+                        ItemObjectList[i].UpdateItem(Time.deltaTime);
+                    }
+                }
             }
             else
             {

@@ -9,7 +9,7 @@ public class JellyHeroChar : InGameObject
 
     private JellyData Data = null;
     private StageData StageData = null;
-    private float RadiusDistance = 0;
+
     public float MoveSpeed { get; private set; }
     public float StartMoveSpeed { get; private set; }
     public float MoveSpeedOffsetPsercent { get; private set; }
@@ -19,7 +19,6 @@ public class JellyHeroChar : InGameObject
     {
         CenterPos = centerPos;
 
-        RadiusDistance = CommonData.TRACK_RADIUS_DISTANCE;
         Data = DataManager.Instance.JellyHeroDataDic[id];
         Anim.SetTrigger("Run");
     }
@@ -54,7 +53,7 @@ public class JellyHeroChar : InGameObject
 
         var TargetMovePos = Pos + (MoveDir * MoveSpeed * time);
         var TargetToCenterDis = Vector3.Distance(CenterPos.position, TargetMovePos);
-        Vector3 TargetMoveRealPos = Vector3.MoveTowards(TargetMovePos, TargetToCenterDir, (TargetToCenterDis - RadiusDistance));
+        Vector3 TargetMoveRealPos = Vector3.MoveTowards(TargetMovePos, TargetToCenterDir, (TargetToCenterDis - CommonData.TRACK_RADIUS_DISTANCE));
         Pos = TargetMoveRealPos;
 
         double CurrAngle = GetCenterToBallAngle();

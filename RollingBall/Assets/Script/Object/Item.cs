@@ -12,6 +12,15 @@ public class Item : InGameObject
     public ItemData Data;
     public Animator Anim;
 
+    private Transform CenterPos;
+    private float MoveSpeed = 0.5f;
+    private float MoveDegree = 0;
+    private float FirtstDegree = 0;
+    private float MoveDegreeMin = 0;
+    private float MoveDegreeMax = 0;
+    private float MoveTempDegree = 0;
+    private bool MoveRightDir = false;
+
     public virtual void ResetItem()
     {
         Type = CommonData.OBJECT_TYPE.ITEM;
@@ -21,12 +30,18 @@ public class Item : InGameObject
         Anim.Rebind();
     }
 
-    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex)
+    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex, float moveDegree = 20)
     {
         gameObject.SetActive(true);
         UniqueIndex = uniqueIndex;
         Data = DataManager.Instance.ItemDataDic[type];
         ItemType = Data.itemtype;
+        FirtstDegree = Degree;
+        MoveDegree = moveDegree;
+        MoveDegreeMax = (FirtstDegree + MoveDegree);
+        MoveDegreeMin = (FirtstDegree - MoveDegree);
+        MoveTempDegree = FirtstDegree;
+
 
         switch (type)
         {
@@ -48,4 +63,23 @@ public class Item : InGameObject
                 break;
         }
     }
+
+    public void UpdateItem(float time)
+    {
+        if(MoveDegree != 0)
+        {
+            MoveTempDegree = MoveTempDegree + (MoveRightDir ? MoveSpeed : -MoveSpeed);
+            if(MoveTempDegree < 0)
+                SetPlace(360f - MoveTempDegree);
+            else
+                SetPlace(MoveTempDegree);
+
+
+            if (MoveRightDir && MoveTempDegree > MoveDegreeMax ||
+                MoveRightDir == false && MoveTempDegree < MoveDegreeMin)
+                MoveRightDir = !MoveRightDir;
+        }
+            
+    }
+
 }
