@@ -12,6 +12,7 @@ public class JellyHeroChar : InGameObject
     private float RadiusDistance = 0;
     public float MoveSpeed { get; private set; }
     public float StartMoveSpeed { get; private set; }
+    public float MoveSpeedOffsetPsercent { get; private set; }
     public bool JellyMoveRightDir { get; private set; }
 
     public void Initialize(Transform centerPos, int id)
@@ -32,6 +33,7 @@ public class JellyHeroChar : InGameObject
     {
         StageData = stageData;
         StartMoveSpeed = StageData.start_speed;
+        MoveSpeedOffsetPsercent = 0f;
         MoveSpeed = StageData.start_speed;
         JellyMoveRightDir = StageData.start_rightdir;
         gameObject.transform.localScale = new Vector3(JellyMoveRightDir ? 1 : -1, 1, 1);
@@ -57,14 +59,14 @@ public class JellyHeroChar : InGameObject
 
         double CurrAngle = GetCenterToBallAngle();
 
+        float speed = (StartMoveSpeed * MoveSpeedOffsetPsercent) + StartMoveSpeed;
         if (CurrAngle >= 180 && PrevAngle >= 180)
         {
-            MoveSpeed = StartMoveSpeed * Mathf.Abs(((float)CurrAngle - 360f)) / 180f + StartMoveSpeed * 0.3f;
+            MoveSpeed = speed * Mathf.Abs(((float)CurrAngle - 360f)) / 180f + speed * 0.3f;
         }
         else
         {
-            MoveSpeed = StartMoveSpeed * (float)CurrAngle / 180f + StartMoveSpeed * 0.3f;
-
+            MoveSpeed = speed * (float)CurrAngle / 180f + speed * 0.3f;
         }
         Anim.speed = MoveSpeed / StartMoveSpeed;
         gameObject.transform.position = Pos;
@@ -91,5 +93,12 @@ public class JellyHeroChar : InGameObject
             Angle = 360 + Angle;
 
         return Angle;
+    }
+
+    public void PlusMoveSpeedOffset(float percent)
+    {
+        MoveSpeedOffsetPsercent += percent;
+        if (MoveSpeedOffsetPsercent < -0.7f)
+            MoveSpeedOffsetPsercent = -0.7f;
     }
 }

@@ -38,6 +38,12 @@ public class Item : InGameObject
             case CommonData.ITEM_TYPE.SAW:
                 Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/Saw/Saw", typeof(RuntimeAnimatorController));
                 break;
+            case CommonData.ITEM_TYPE.SPEED_DOWN:
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/SpeedDown/SpeedDown", typeof(RuntimeAnimatorController));
+                break;
+            case CommonData.ITEM_TYPE.SPEED_UP:
+                Anim.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("Animation/SpeedUp/SpeedUp", typeof(RuntimeAnimatorController));
+                break;
             default:
                 break;
         }

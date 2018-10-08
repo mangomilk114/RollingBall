@@ -10,6 +10,8 @@ public class CommonData
         NONE,
         CHEST,
         SAW,
+        SPEED_DOWN,
+        SPEED_UP,
     }
     public enum OBJECT_TYPE
     {
@@ -45,6 +47,10 @@ public class CommonData
                 return ITEM_TYPE.CHEST;
             case "SAW":
                 return ITEM_TYPE.SAW;
+            case "SPEED_DOWN":
+                return ITEM_TYPE.SPEED_DOWN;
+            case "SPEED_UP":
+                return ITEM_TYPE.SPEED_UP;
         }
 
         return ITEM_TYPE.NONE;

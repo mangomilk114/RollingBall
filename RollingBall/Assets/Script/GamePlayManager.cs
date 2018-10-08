@@ -309,6 +309,8 @@ public class GamePlayManager : MonoBehaviour
                 ChangeChestCount();
                 break;
             case CommonData.ITEM_TYPE.SAW:
+            case CommonData.ITEM_TYPE.SPEED_DOWN:
+            case CommonData.ITEM_TYPE.SPEED_UP:
                 break;
             default:
                 break;
@@ -323,6 +325,12 @@ public class GamePlayManager : MonoBehaviour
                 return;
             case CommonData.ITEM_TYPE.SAW:
                 MinusHealthPoint(item.Data.value);
+                break;
+            case CommonData.ITEM_TYPE.SPEED_DOWN:
+                PlayJellyHero.PlusMoveSpeedOffset(-item.Data.value * 0.01f);
+                break;
+            case CommonData.ITEM_TYPE.SPEED_UP:
+                PlayJellyHero.PlusMoveSpeedOffset(item.Data.value * 0.01f);
                 break;
             default:
                 break;

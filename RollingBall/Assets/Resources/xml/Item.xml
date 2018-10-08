@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<Item id = "1" name="CHEST" type="CHEST" img="SpeedUp" value="1"/>
-	<Item id = "2" name="SAW" type="SAW" img="SpeedDown" value="1"/>
+	<Item id = "1" name="CHEST" type="CHEST" value="1"/>
+	<Item id = "2" name="SAW" type="SAW" value="1"/>
+	<Item id = "3" name="SPEED_DOWN" type="SPEED_DOWN" value="50"/>
+	<Item id = "4" name="SPEED_UP" type="SPEED_UP" value="50"/>
 </Datas> 
