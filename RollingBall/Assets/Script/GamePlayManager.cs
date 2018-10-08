@@ -38,6 +38,8 @@ public class GamePlayManager : MonoBehaviour
     [System.NonSerialized]
     public bool IsStageClear = false;
     [System.NonSerialized]
+    public bool IsStagePlay = false;
+    [System.NonSerialized]
     public int TurnCount = 1;
     [System.NonSerialized]
     public int HaveChestCount = 0;
@@ -376,6 +378,7 @@ public class GamePlayManager : MonoBehaviour
             PlayJellyHero.SetStageData(CurrStageData);
             IsStageClear = false;
             TurnCount = 0;
+            IsStagePlay = false;
         }
         else
         {
@@ -398,26 +401,7 @@ public class GamePlayManager : MonoBehaviour
                     var itemObj = PrevCrashObejct.GetComponent<Item>();
                     if (touch)
                         HaveItem(itemObj);
-                    //else
-                    //    PassItem(itemObj);
                     break;
-                //case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
-                //    if (JellyHeroCrashType == crashObject.Type)
-                //        return;
-                //    if (PlayJellyHero.JellyMoveRightDir)
-                //        SetStageClearCheck();
-                //    break;
-                //case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
-                //    if (JellyHeroCrashType == crashObject.Type)
-                //        return;
-                //    if (PlayJellyHero.JellyMoveRightDir == false)
-                //        SetStageClearCheck();
-                //    break;
-                //case CommonData.OBJECT_TYPE.STAGE_START:
-                //    if (JellyHeroCrashType == crashObject.Type)
-                //        return;
-                //    PassStartPos();
-                //    break;
                 default:
                     break;
             }
@@ -448,7 +432,10 @@ public class GamePlayManager : MonoBehaviour
                         SetStageClearCheck();
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_START:
-                    PassStartPos();
+                    if (IsStagePlay)
+                        PassStartPos();
+                    else
+                        IsStagePlay = true;
                     break;
                 default:
                     break;
