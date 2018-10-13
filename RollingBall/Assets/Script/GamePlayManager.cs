@@ -248,14 +248,18 @@ public class GamePlayManager : MonoBehaviour
 
         var StagePresetData = DataManager.Instance.StagePresetDataDic[CurrStageData.preset];
 
-        List<KeyValuePair<int, CommonData.ITEM_TYPE>> ItemDegreeList = new List<KeyValuePair<int, CommonData.ITEM_TYPE>>();
-        var itemList = StagePresetData.GetPresetItemList();
+        List<KeyValuePair<int, PresetData>> ItemDegreeList = new List<KeyValuePair<int, PresetData>>();
+        var itemList = StagePresetData.itemTypeList;
         for (int listIndex = 0; listIndex < itemList.Count; listIndex++)
         {
-            var ItemType = itemList[listIndex].Key;
-            int Count = itemList[listIndex].Value;
-
-            for (int index_1 = 0; index_1 < Count; index_1++)
+            if (itemList[listIndex].Angle > -1f)
+            {
+                ItemDegreeList.Add(new KeyValuePair<int, PresetData>((int)itemList[listIndex].Angle, itemList[listIndex]));
+            }
+        }
+        for (int listIndex = 0; listIndex < itemList.Count; listIndex++)
+        {
+            if(itemList[listIndex].Angle <= -1f)
             {
                 while (true)
                 {
@@ -279,7 +283,7 @@ public class GamePlayManager : MonoBehaviour
 
                     if (addEnable)
                     {
-                        ItemDegreeList.Add(new KeyValuePair<int, CommonData.ITEM_TYPE>(degree, ItemType));
+                        ItemDegreeList.Add(new KeyValuePair<int, PresetData>(degree, itemList[listIndex]));
                         break;
                     }
 
@@ -289,8 +293,6 @@ public class GamePlayManager : MonoBehaviour
                 if (ItemDegreeList.Count >= CommonData.STAGE_ALL_ITEM_COUNT)
                     break;
             }
-            if (ItemDegreeList.Count >= CommonData.STAGE_ALL_ITEM_COUNT)
-                break;
         }
 
         for (int i = 0; i < ItemObjectList.Count; i++)
@@ -299,7 +301,7 @@ public class GamePlayManager : MonoBehaviour
                 break;
 
             ItemObjectList[i].SetPlace(ItemDegreeList[i].Key);
-            ItemObjectList[i].SetData(ItemDegreeList[i].Value, i);
+            ItemObjectList[i].SetData(ItemDegreeList[i].Value.ItemType, i, ItemDegreeList[i].Value.MoveAngle);
         }
     }
 

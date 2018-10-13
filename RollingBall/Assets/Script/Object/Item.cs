@@ -11,6 +11,7 @@ public class Item : InGameObject
     [System.NonSerialized]
     public ItemData Data;
     public Animator Anim;
+    public SpriteRenderer Img;
 
     private Transform CenterPos;
     private float MoveSpeed = 0.5f;
@@ -28,9 +29,10 @@ public class Item : InGameObject
         ItemType = CommonData.ITEM_TYPE.NONE;
         UniqueIndex = -1;
         Anim.Rebind();
+        Img.transform.localRotation = new Quaternion();
     }
 
-    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex, float moveDegree = 20)
+    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex, float moveDegree = 0)
     {
         gameObject.SetActive(true);
         UniqueIndex = uniqueIndex;
