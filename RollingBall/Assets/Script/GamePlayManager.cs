@@ -100,6 +100,12 @@ public class GamePlayManager : MonoBehaviour
         GamePlayUI.GameMain();
     }
 
+    public void GameStartViewAds()
+    {
+        GamePlayUI.SetNextUIEnable(false);
+        Admanager.Instance.ShowRewardedAd();
+    }
+
     public void GameReady()
     {
         CurrGameState = GAME_STATE.READY;
@@ -117,6 +123,8 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameEnd()
     {
+        Admanager.Instance.ShowinterstitialAd();
+
         CurrGameState = GAME_STATE.END;
         ResetStage();
         PlayJellyHero.ResetPos();
@@ -138,7 +146,7 @@ public class GamePlayManager : MonoBehaviour
         switch (CurrGameState)
         {
             case GAME_STATE.MAIN:
-                GameReady();
+                GameStartViewAds();
                 break;
             case GAME_STATE.READY:
                 GamePlay();

@@ -21,7 +21,7 @@ using UnityEngine;
 namespace GoogleMobileAds.Common
 {
     public class DummyClient : IBannerClient, IInterstitialClient, IRewardBasedVideoAdClient,
-            IAdLoaderClient, IMobileAdsClient
+            IAdLoaderClient, INativeExpressAdClient, IMobileAdsClient
     {
         public DummyClient()
         {
@@ -45,8 +45,6 @@ namespace GoogleMobileAds.Common
 
         public event EventHandler<EventArgs> OnAdLeavingApplication;
 
-        public event EventHandler<EventArgs> OnAdCompleted;
-
         public event EventHandler<CustomNativeEventArgs> OnCustomNativeTemplateAdLoaded;
 
 #pragma warning restore 67
@@ -66,21 +64,6 @@ namespace GoogleMobileAds.Common
         }
 
         public void Initialize(string appId)
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-        }
-
-        public void SetApplicationMuted(bool muted)
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-        }
-
-        public void SetApplicationVolume(float volume)
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-        }
-
-        public void SetiOSAppPauseOnBackground(bool pause)
         {
             Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
         }
@@ -111,28 +94,6 @@ namespace GoogleMobileAds.Common
         }
 
         public void DestroyBannerView()
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-        }
-
-        public float GetHeightInPixels()
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-            return 0;
-        }
-
-        public float GetWidthInPixels()
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-            return 0;
-        }
-
-        public void SetPosition(AdPosition adPosition)
-        {
-            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-        }
-
-        public void SetPosition(int x, int y)
         {
             Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
         }
@@ -193,16 +154,34 @@ namespace GoogleMobileAds.Common
             Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
         }
 
+        public void CreateNativeExpressAdView(string adUnitId, AdSize adSize, AdPosition position)
+        {
+            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
+        }
+
+        public void CreateNativeExpressAdView(string adUnitId, AdSize adSize, int positionX, int positionY)
+        {
+            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
+        }
+
         public void SetAdSize(AdSize adSize)
         {
             Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
         }
 
-        public string MediationAdapterClassName()
+        public void ShowNativeExpressAdView()
         {
             Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
-            return null;
         }
 
+        public void HideNativeExpressAdView()
+        {
+            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
+        }
+
+        public void DestroyNativeExpressAdView()
+        {
+            Debug.Log("Dummy " + MethodBase.GetCurrentMethod().Name);
+        }
     }
 }

@@ -142,4 +142,15 @@ public class UIGamePlay : MonoBehaviour
         info.AppendLine(string.Format("현재 점수 : {0}", PlayerData.Instance.Score));
         Info.text = info.ToString();
     }
+
+    public void SetNextUIEnable(bool bNextUIEnable)
+    {
+        NextUIEnable = bNextUIEnable;
+    }
+
+    public bool GetNextUIEnable()
+    {
+        return NextUIEnable;
+    }
+
 }

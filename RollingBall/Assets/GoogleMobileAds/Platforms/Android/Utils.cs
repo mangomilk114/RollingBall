@@ -57,6 +57,8 @@ namespace GoogleMobileAds.Android
 
         public const string RewardBasedVideoClassName = "com.google.unity.ads.RewardBasedVideo";
 
+        public const string NativeExpressAdViewClassName = "com.google.unity.ads.NativeExpressAd";
+
         public const string NativeAdLoaderClassName = "com.google.unity.ads.NativeAdLoader";
 
         public const string UnityAdListenerClassName = "com.google.unity.ads.UnityAdListener";
@@ -173,8 +175,6 @@ namespace GoogleMobileAds.Android
                 bundle.Call("putString", entry.Key, entry.Value);
             }
 
-            bundle.Call("putString", "is_unity", "1");
-
             AndroidJavaObject extras = new AndroidJavaObject(AdMobExtrasClassName, bundle);
             adRequestBuilder.Call<AndroidJavaObject>("addNetworkExtras", extras);
 
@@ -186,19 +186,16 @@ namespace GoogleMobileAds.Android
 
                 foreach (KeyValuePair<string, string> entry in mediationExtra.Extras)
                 {
-                    map.Call<AndroidJavaObject>("put", entry.Key, entry.Value);
+                    map.Call<string>("put", entry.Key, entry.Value);
                 }
 
                 AndroidJavaObject mediationExtras =
                         mediationExtrasBundleBuilder.Call<AndroidJavaObject>("buildExtras", map);
 
-                if (mediationExtras != null)
-                {
-                    adRequestBuilder.Call<AndroidJavaObject>(
+                adRequestBuilder.Call<AndroidJavaObject>(
                         "addNetworkExtrasBundle",
                         mediationExtrasBundleBuilder.Call<AndroidJavaClass>("getAdapterClass"),
                         mediationExtras);
-                }
             }
 
             return adRequestBuilder.Call<AndroidJavaObject>("build");

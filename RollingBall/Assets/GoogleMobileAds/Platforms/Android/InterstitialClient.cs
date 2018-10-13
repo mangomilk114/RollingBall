@@ -77,12 +77,6 @@ namespace GoogleMobileAds.Android
             this.interstitial.Call("destroy");
         }
 
-        // Returns the mediation adapter class name.
-        public string MediationAdapterClassName()
-        {
-            return this.interstitial.Call<string>("getMediationAdapterClassName");
-        }
-
         #endregion
 
         #region Callbacks from UnityInterstitialAdListener.
