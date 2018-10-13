@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
 	<Stage id = "1" start_speed="10" start_rightdir="TRUE" preset="1"/>
-	<Stage id = "2" start_speed="10" start_rightdir="TRUE" preset="1"/>
-	<Stage id = "3" start_speed="10" start_rightdir="TRUE" preset="1"/>
-	<Stage id = "4" start_speed="10" start_rightdir="TRUE" preset="1"/>
-	<Stage id = "5" start_speed="10" start_rightdir="TRUE" preset="1"/>
 </Datas> 

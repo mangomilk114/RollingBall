@@ -30,7 +30,7 @@ public class Item : InGameObject
         Anim.Rebind();
     }
 
-    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex, float moveDegree = 20)
+    public void SetData(CommonData.ITEM_TYPE type, int uniqueIndex, float moveDegree = 0)
     {
         gameObject.SetActive(true);
         UniqueIndex = uniqueIndex;
