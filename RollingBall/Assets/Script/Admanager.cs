@@ -61,6 +61,7 @@ public class Admanager : MonoBehaviour {
         Initialize();
     }
 
+    //게임 하단에 표시되는 애드몹 배너
     public void RequestBannerAd()
     {
         string adUnitId = string.Empty;
@@ -109,6 +110,7 @@ public class Admanager : MonoBehaviour {
         interstitial.OnAdClosed += HandleOnInterstitialAdClosed;
     }
 
+    //게임 오버에 표시되는 전면 애드몹 광고
     public void ShowinterstitialAd()
     {
         if (!interstitial.IsLoaded())
@@ -131,7 +133,8 @@ public class Admanager : MonoBehaviour {
 #endif
     }
 
-    public void ShowRewardedAd()
+    //게임 시작 전에 재생되는 유니티 애즈 동영상광고
+    public void ShowVideoAds()
     {
         if (Advertisement.IsReady(video_id))
         {

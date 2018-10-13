@@ -100,10 +100,11 @@ public class GamePlayManager : MonoBehaviour
         GamePlayUI.GameMain();
     }
 
+    // 게임 시작 전에 광고 재생
     public void GameStartViewAds()
     {
         GamePlayUI.SetNextUIEnable(false);
-        Admanager.Instance.ShowRewardedAd();
+        Admanager.Instance.ShowVideoAds();
     }
 
     public void GameReady()
