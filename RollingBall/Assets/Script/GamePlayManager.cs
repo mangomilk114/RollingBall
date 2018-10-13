@@ -244,11 +244,14 @@ public class GamePlayManager : MonoBehaviour
         var itemList = StagePresetData.itemTypeList;
         for (int listIndex = 0; listIndex < itemList.Count; listIndex++)
         {
-            if(itemList[listIndex].Angle > -1f)
+            if (itemList[listIndex].Angle > -1f)
             {
                 ItemDegreeList.Add(new KeyValuePair<int, PresetData>((int)itemList[listIndex].Angle, itemList[listIndex]));
             }
-            else
+        }
+        for (int listIndex = 0; listIndex < itemList.Count; listIndex++)
+        {
+            if(itemList[listIndex].Angle <= -1f)
             {
                 while (true)
                 {
