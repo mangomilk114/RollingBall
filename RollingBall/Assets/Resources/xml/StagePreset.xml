@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Datas>
-	<StagePreset id = "1" object_1="CHEST, 1, 30" object_2="SAW, 2, -1, 20" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "1" object_1="CHEST, 1, 0" object_2="" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "2" object_1="CHEST, 1, 0" object_2="CHEST, 1, 90" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "3" object_1="CHEST, 1, 0" object_2="CHEST, 1, 90" object_3="CHEST, 1, 270" object_4="" object_5="" object_6="" />
+	<StagePreset id = "4" object_1="CHEST, 3" object_2="" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "5" object_1="CHEST, 2" object_2="SAW, 1, 0" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "6" object_1="CHEST, 2" object_2="SAW, 1, 30" object_3="SAW, 1, 200" object_4="" object_5="" object_6="" />
+	<StagePreset id = "7" object_1="CHEST, 2" object_2="SAW, 1, 30" object_3="SAW, 1, 200" object_4="SAW, 1, 350" object_5="" object_6="" />
+	<StagePreset id = "8" object_1="CHEST, 2" object_2="SAW, 3" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "9" object_1="CHEST, 3" object_2="SAW, 3" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "10" object_1="CHEST, 3" object_2="SAW, 1" object_3="SPEED_UP, 1, 0" object_4="" object_5="" object_6="" />
+	<StagePreset id = "11" object_1="CHEST, 3" object_2="SAW, 1" object_3="SPEED_DOWN, 1, 0" object_4="" object_5="" object_6="" />
+	<StagePreset id = "12" object_1="CHEST, 1, 1, 20" object_2="SAW, 1, 90" object_3="SAW, 1, 270" object_4="" object_5="" object_6="" />
+	<StagePreset id = "13" object_1="CHEST, 1, -1, 20" object_2="SAW, 1, 90" object_3="SAW, 1, 270" object_4="" object_5="" object_6="" />
+	<StagePreset id = "14" object_1="CHEST, 2, -1, 20" object_2="SAW, 1, 90" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "15" object_1="CHEST, 2, -1, 20" object_2="SAW, 1, -1, 20" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "16" object_1="CHEST, 2, -1, 20" object_2="SAW, 2, -1, 20" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "17" object_1="CHEST, 2, -1, 20" object_2="SAW, 1, -1, 20" object_3="SPEED_UP, 1, -1" object_4="" object_5="" object_6="" />
+	<StagePreset id = "18" object_1="CHEST, 2, -1, 20" object_2="SAW, 1, -1, 20" object_3="SPEED_DOWN, 1, -1" object_4="" object_5="" object_6="" />
+	<StagePreset id = "19" object_1="CHEST, 2, -1, 20" object_2="SAW, 1, -1, 20" object_3="SPEED_DOWN, 1, -1" object_4="SPEED_UP, 1, -1" object_5="" object_6="" />
+	<StagePreset id = "20" object_1="CHEST, 3, -1, 30" object_2="SAW, 3, -1, 30" object_3="SPEED_DOWN, 1, 0" object_4="" object_5="" object_6="" />
+	<StagePreset id = "21" object_1="CHEST, 3, -1, 30" object_2="SAW, 3, -1, 30" object_3="SPEED_UP, 1, 0" object_4="" object_5="" object_6="" />
 </Datas> 
 
 <!--
