@@ -605,7 +605,7 @@ public class GamePlayManager : MonoBehaviour
 
                     if(changeJellyHeroAngle >= changeItemAngle)
                     {
-                        float gap = jellyHeroAngle - ItemObjectList[i].Degree;
+                        float gap = changeJellyHeroAngle - changeItemAngle;
 
                         if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP > gap && minGap > gap)
                         {
