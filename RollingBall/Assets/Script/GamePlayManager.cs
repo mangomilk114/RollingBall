@@ -45,8 +45,9 @@ public class GamePlayManager : MonoBehaviour
     public int HaveChestCount = 0;
 
     private UIGamePlay GamePlayUI;
-    private InGameObject PrevCrashObejct = null;
-    private InGameObject CurrCrashObejct = null;
+    private InGameObject CrashObject = null;
+    private InGameObject PassObject = null;
+    private InGameObject PrevPassObject = null;
 
     public JellyHeroChar PlayJellyHero;
     public SpriteRenderer BackgroundImg;
@@ -59,6 +60,8 @@ public class GamePlayManager : MonoBehaviour
     public List<JellyHPChar> JellyHPCharObjectList = new List<JellyHPChar>();
     public List<GameObject> ChestObjectList = new List<GameObject>();
 
+    private int GamePlayCount = 0;
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -68,7 +71,7 @@ public class GamePlayManager : MonoBehaviour
     public void Initialize(UIGamePlay ui)
     {
         GamePlayUI = ui;
-
+        GamePlayCount = 0;
         JellyHeroStart.SetPlace(CommonData.JELLY_START_DEGREE);
         JellyHeroEndCheck_Left.SetPlace(CommonData.JELLY_END_LEFT_DEGREE);
         JellyHeroEndCheck_Right.SetPlace(CommonData.JELLY_END_RIGHT_DEGREE);
@@ -83,6 +86,7 @@ public class GamePlayManager : MonoBehaviour
         CurrStageData = GetStageData();
         HealthPoint = CommonData.DEFAULT_JELLY_HEALTH_POINT;
         MaxHealthPoint = CommonData.MAX_JELLY_HEALTH_POINT;
+        ChangeJellyHPCharCount();
         PlayJellyHero.Initialize(CenterPos, PlayerData.Instance.JellyCharId);
         
         GamePlayingTouch = false;
@@ -109,6 +113,8 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameReady()
     {
+        GamePlayCount++;
+        IsStagePlay = false;
         CurrGameState = GAME_STATE.READY;
         ResetGamePlay();
         SetStage();
@@ -124,7 +130,8 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameEnd()
     {
-        Admanager.Instance.ShowinterstitialAd();
+        if (GamePlayCount % CommonData.GAME_END_AD_VIEW_COUNT == 0)
+            Admanager.Instance.ShowinterstitialAd();
 
         CurrGameState = GAME_STATE.END;
         ResetStage();
@@ -147,7 +154,10 @@ public class GamePlayManager : MonoBehaviour
         switch (CurrGameState)
         {
             case GAME_STATE.MAIN:
-                GameStartViewAds();
+                if (GamePlayCount % CommonData.GAME_START_AD_VIEW_COUNT == 0)
+                    GameStartViewAds();
+                else
+                    GameReady();
                 break;
             case GAME_STATE.READY:
                 GamePlay();
@@ -178,19 +188,18 @@ public class GamePlayManager : MonoBehaviour
                 continue;
             }
 
-            PrevCrashObejct = null;
-            CurrCrashObejct = null;
+            CrashObject = null;
+            PassObject = null;
 
             if (CurrGameState == GAME_STATE.PLAY)
             {
-                PrevCrashObejct = GetJellyHeroToObjectCrashObject();
+                CrashObject = GetJellyHeroToObjectCrashObject();
 
                 JellyHeroCrashAcion(GamePlayingTouch);
                 GamePlayingTouch = false;
                 PlayJellyHero.UpdateJellyHero(Time.deltaTime);
 
-                CurrCrashObejct = GetJellyHeroToObjectCrashObject();
-
+                PassObject = GetJellyHeroToObjectPassObject();
                 JellyHeroPassAcion();
 
                 for (int i = 0; i < ItemObjectList.Count; i++)
@@ -326,6 +335,7 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.CHEST:
                 HaveChestCount++;
                 ChangeChestCount();
+                PlayJellyHero.SetTalkImg("chest");
                 break;
             case CommonData.ITEM_TYPE.SAW:
             case CommonData.ITEM_TYPE.SPEED_DOWN:
@@ -344,6 +354,7 @@ public class GamePlayManager : MonoBehaviour
                 return;
             case CommonData.ITEM_TYPE.SAW:
                 MinusHealthPoint(item.Data.value);
+                PlayJellyHero.SetTalkImg("demage");
                 break;
             case CommonData.ITEM_TYPE.SPEED_DOWN:
                 PlayJellyHero.PlusMoveSpeedOffset(-item.Data.value * 0.01f);
@@ -419,13 +430,13 @@ public class GamePlayManager : MonoBehaviour
     public void JellyHeroCrashAcion(bool touch)
     {
         bool minusHealthPointEnable = true;
-        if(PrevCrashObejct != null)
+        if(CrashObject != null)
         {
-            switch (PrevCrashObejct.Type)
+            switch (CrashObject.Type)
             {
                 case CommonData.OBJECT_TYPE.ITEM:
                     minusHealthPointEnable = false;
-                    var itemObj = PrevCrashObejct.GetComponent<Item>();
+                    var itemObj = CrashObject.GetComponent<Item>();
                     if (touch)
                         HaveItem(itemObj);
                     break;
@@ -442,21 +453,31 @@ public class GamePlayManager : MonoBehaviour
 
     public void JellyHeroPassAcion()
     {
-        if (PrevCrashObejct != null && PrevCrashObejct != CurrCrashObejct)
+        if (PassObject == null)
+            PrevPassObject = null;
+
+        if (PrevPassObject == PassObject)
+            return;
+
+        if(PassObject != null)
         {
-            switch (PrevCrashObejct.Type)
+            switch (PassObject.Type)
             {
                 case CommonData.OBJECT_TYPE.ITEM:
-                    var itemObj = PrevCrashObejct.GetComponent<Item>();
+                    var itemObj = PassObject.GetComponent<Item>();
                     PassItem(itemObj);
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_END_LEFT:
                     if (PlayJellyHero.JellyMoveRightDir)
                         SetStageClearCheck();
+                    else
+                        IsStagePlay = true;
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_END_RIGHT:
                     if (PlayJellyHero.JellyMoveRightDir == false)
                         SetStageClearCheck();
+                    else
+                        IsStagePlay = true;
                     break;
                 case CommonData.OBJECT_TYPE.STAGE_START:
                     if (IsStagePlay)
@@ -468,6 +489,8 @@ public class GamePlayManager : MonoBehaviour
                     break;
             }
         }
+
+        PrevPassObject = PassObject;
     }
 
     private float GetCenterToJellyHeroAngle()
@@ -560,6 +583,77 @@ public class GamePlayManager : MonoBehaviour
             }
         }
         
+
+        return crashObject;
+    }
+
+    private InGameObject GetJellyHeroToObjectPassObject()
+    {
+        InGameObject crashObject = null;
+        var jellyHeroAngle = GetCenterToJellyHeroAngle();
+
+        if(CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP > jellyHeroAngle)
+        {
+            float minGap = float.MaxValue;
+            for (int i = 0; i < ItemObjectList.Count; i++)
+            {
+                if (ItemObjectList[i].UniqueIndex >= 0)
+                {
+                    var changeJellyHeroAngle = jellyHeroAngle + 360;
+                    var changeItemAngle = ItemObjectList[i].Degree;
+                    if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP > changeItemAngle)
+                        changeItemAngle += 360;
+
+                    if(changeJellyHeroAngle >= changeItemAngle)
+                    {
+                        float gap = jellyHeroAngle - ItemObjectList[i].Degree;
+
+                        if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP > gap && minGap > gap)
+                        {
+                            minGap = gap;
+                            crashObject = ItemObjectList[i];
+                        }
+                    } 
+                }
+            }
+        }
+        else
+        {
+            float minGap = float.MaxValue;
+            for (int i = 0; i < ItemObjectList.Count; i++)
+            {
+                if (ItemObjectList[i].UniqueIndex >= 0 && jellyHeroAngle >= ItemObjectList[i].Degree)
+                {
+                    float gap = jellyHeroAngle - ItemObjectList[i].Degree;
+
+                    if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP > gap && minGap > gap)
+                    {
+                        minGap = gap;
+                        crashObject = ItemObjectList[i];
+                    }
+                }
+            }
+        }
+
+        if (crashObject == null)
+        {
+            float startCheckGap = GetTargetToObjectAngleGap(jellyHeroAngle, JellyHeroStart);
+            if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= startCheckGap)
+                crashObject = JellyHeroStart;
+
+            if (PlayJellyHero.JellyMoveRightDir)
+            {
+                float LeftCheckGap = GetTargetToObjectAngleGap(jellyHeroAngle, JellyHeroEndCheck_Left);
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= LeftCheckGap)
+                    crashObject = JellyHeroEndCheck_Left;
+            }
+            else
+            {
+                float RightCheckGap = GetTargetToObjectAngleGap(jellyHeroAngle, JellyHeroEndCheck_Right);
+                if (CommonData.IN_GAMEOBJECT_CRASH_DEGREE_GAP >= RightCheckGap)
+                    crashObject = JellyHeroEndCheck_Right;
+            }
+        }
 
         return crashObject;
     }

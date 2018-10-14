@@ -5,6 +5,7 @@ using UnityEngine;
 public class JellyHeroChar : InGameObject
 {
     public Animator Anim = null;
+    public SpriteRenderer TalkImg;
     private Transform CenterPos;
 
     private JellyData Data = null;
@@ -36,6 +37,7 @@ public class JellyHeroChar : InGameObject
         MoveSpeed = StageData.start_speed;
         JellyMoveRightDir = StageData.start_rightdir;
         gameObject.transform.localScale = new Vector3(JellyMoveRightDir ? 1 : -1, 1, 1);
+        TalkImg.sprite = null;
     }
 
     public void UpdateJellyHero(float time)
@@ -99,5 +101,22 @@ public class JellyHeroChar : InGameObject
         MoveSpeedOffsetPsercent += percent;
         if (MoveSpeedOffsetPsercent < -0.7f)
             MoveSpeedOffsetPsercent = -0.7f;
+    }
+
+    public void SetTalkImg(string type)
+    {
+        StopAllCoroutines();
+        if (type == "demage")
+            TalkImg.sprite = (Sprite)Resources.Load("talk_demage", typeof(Sprite));
+        else if (type == "chest")
+            TalkImg.sprite = (Sprite)Resources.Load("talk_chest", typeof(Sprite));
+
+        StartCoroutine(Co_TalkImg());
+    }
+
+    IEnumerator Co_TalkImg()
+    {
+        yield return new WaitForSeconds(0.3f);
+        TalkImg.sprite = null;
     }
 }

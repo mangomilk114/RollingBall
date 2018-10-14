@@ -24,19 +24,22 @@ public class CommonData
     }
 
     public static float TRACK_RADIUS_DISTANCE = 4.57f;
-    public static int DEFAULT_JELLY_HEALTH_POINT = 5;
-    public static int MAX_JELLY_HEALTH_POINT = 5;
+    public static int DEFAULT_JELLY_HEALTH_POINT = 3;
+    public static int MAX_JELLY_HEALTH_POINT = 3;
 
     public static int JELLY_START_DEGREE = 180;
     public static int JELLY_END_LEFT_DEGREE = 160;
     public static int JELLY_END_RIGHT_DEGREE = 200;
     public static int STAGE_ALL_ITEM_COUNT = 15;
     public static int ITEM_DEGREE_GAP = 15;
-    public static float IN_GAMEOBJECT_CRASH_DEGREE_GAP = 15;
+    public static float IN_GAMEOBJECT_CRASH_DEGREE_GAP = 12;
     public static int TOUCH_MINUS_HP = 1;
     public static int TURN_TRACK_MINUS_HP = 1;
 
     public static int COIN_ITEM_CRAETE_PERCENT = 10;
+
+    public static int GAME_START_AD_VIEW_COUNT = 3;
+    public static int GAME_END_AD_VIEW_COUNT = 2;
 
 
     public static ITEM_TYPE GetItemType(string type)

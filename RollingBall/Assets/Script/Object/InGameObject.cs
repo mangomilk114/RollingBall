@@ -5,7 +5,6 @@ using UnityEngine;
 public class InGameObject : MonoBehaviour
 {
     public CommonData.OBJECT_TYPE Type;
-    [System.NonSerialized]
     public float Degree;
 
     public void SetPlace(float degree)

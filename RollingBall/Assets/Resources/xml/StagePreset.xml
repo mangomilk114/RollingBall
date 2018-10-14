@@ -5,9 +5,9 @@
 	<StagePreset id = "3" object_1="CHEST, 1, 0" object_2="CHEST, 1, 90" object_3="CHEST, 1, 270" object_4="" object_5="" object_6="" />
 	<StagePreset id = "4" object_1="CHEST, 3" object_2="" object_3="" object_4="" object_5="" object_6="" />
 	<StagePreset id = "5" object_1="CHEST, 2" object_2="SAW, 1, 0" object_3="" object_4="" object_5="" object_6="" />
-	<StagePreset id = "6" object_1="CHEST, 2" object_2="SAW, 1, 30" object_3="SAW, 1, 200" object_4="" object_5="" object_6="" />
+	<StagePreset id = "6" object_1="CHEST, 2" object_2="SAW, 1, 30" object_3="SAW, 1, 220" object_4="" object_5="" object_6="" />
 	<StagePreset id = "7" object_1="CHEST, 2" object_2="SAW, 1, 30" object_3="SAW, 1, 200" object_4="SAW, 1, 350" object_5="" object_6="" />
-	<StagePreset id = "8" object_1="CHEST, 2" object_2="SAW, 3" object_3="" object_4="" object_5="" object_6="" />
+	<StagePreset id = "8" object_1="CHEST, 1, 1" object_2="SAW, 1, 270" object_3="SAW, 1, 310" object_4="" object_5="" object_6="" />
 	<StagePreset id = "9" object_1="CHEST, 3" object_2="SAW, 3" object_3="" object_4="" object_5="" object_6="" />
 	<StagePreset id = "10" object_1="CHEST, 3" object_2="SAW, 1" object_3="SPEED_UP, 1, 0" object_4="" object_5="" object_6="" />
 	<StagePreset id = "11" object_1="CHEST, 3" object_2="SAW, 1" object_3="SPEED_DOWN, 1, 0" object_4="" object_5="" object_6="" />
