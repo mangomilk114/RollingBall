@@ -85,6 +85,15 @@ public class UIGamePlay : MonoBehaviour
         ResetUI();
         ChangeStageCount();
         End.gameObject.SetActive(true);
+        StopAllCoroutines();
+        StartCoroutine(CoGameEnd());
+    }
+
+    IEnumerator CoGameEnd()
+    {
+        NextUIEnable = false;
+        yield return new WaitForSeconds(1f);
+        NextUIEnable = true;
     }
 
     public void GamePause()

@@ -134,8 +134,8 @@ public class GamePlayManager : MonoBehaviour
             Admanager.Instance.ShowinterstitialAd();
 
         CurrGameState = GAME_STATE.END;
-        ResetStage();
-        PlayJellyHero.ResetPos();
+        //ResetStage();
+        //PlayJellyHero.ResetPos();
         GamePlayUI.GameEnd();
     }
 
