@@ -335,6 +335,7 @@ public class GamePlayManager : MonoBehaviour
                 HaveChestCount++;
                 ChangeChestCount();
                 PlayJellyHero.SetTalkImg("chest");
+                FxSoundManager.Instance.PlayFXSound(FxSoundManager.SOUND_TYPE.CHEST);
                 break;
             case CommonData.ITEM_TYPE.SAW:
             case CommonData.ITEM_TYPE.SPEED_DOWN:
@@ -354,6 +355,7 @@ public class GamePlayManager : MonoBehaviour
             case CommonData.ITEM_TYPE.SAW:
                 MinusHealthPoint(item.Data.value);
                 PlayJellyHero.SetTalkImg("demage");
+                FxSoundManager.Instance.PlayFXSound(FxSoundManager.SOUND_TYPE.DEMAGE);
                 break;
             case CommonData.ITEM_TYPE.SPEED_DOWN:
                 PlayJellyHero.PlusMoveSpeedOffset(-item.Data.value * 0.01f);

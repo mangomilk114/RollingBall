@@ -19,6 +19,9 @@ public class UIGamePlay : MonoBehaviour
     public UICountImgFont StageCount;
     public GameObject End;
 
+    public AudioSource Audio;
+    public AudioClip Clip;
+
     private bool NextUIEnable = false;
 
     public void Awake()
@@ -31,6 +34,8 @@ public class UIGamePlay : MonoBehaviour
     public void Start()
     {
         GamePlayManager.Instance.Initialize(this);
+
+        PlayBGM();
     }
 
     public void ResetUI()
@@ -120,6 +125,7 @@ public class UIGamePlay : MonoBehaviour
     private void OnClickSound()
     {
         PlayerData.Instance.SetSoundEnable(!PlayerData.Instance.SoundEnable);
+        AudioListener.pause = !PlayerData.Instance.SoundEnable;
         RefrehUI();
     }
 
@@ -160,6 +166,13 @@ public class UIGamePlay : MonoBehaviour
     public bool GetNextUIEnable()
     {
         return NextUIEnable;
+    }
+
+    public void PlayBGM()
+    {
+        Audio.clip = Clip;
+        Audio.Play();
+        AudioListener.pause = !PlayerData.Instance.SoundEnable;
     }
 
 }
