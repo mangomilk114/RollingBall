@@ -107,7 +107,6 @@ public class GamePlayManager : MonoBehaviour
     // 게임 시작 전에 광고 재생
     public void GameStartViewAds()
     {
-        GamePlayUI.SetNextUIEnable(false);
         Admanager.Instance.ShowVideoAds();
     }
 
@@ -130,7 +129,7 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameEnd()
     {
-        if (GamePlayCount % CommonData.GAME_END_AD_VIEW_COUNT == 0)
+        if (GamePlayCount >= CommonData.GAME_END_AD_VIEW_COUNT && GamePlayCount % CommonData.GAME_END_AD_VIEW_COUNT == 0)
             Admanager.Instance.ShowinterstitialAd();
 
         CurrGameState = GAME_STATE.END;
@@ -154,7 +153,7 @@ public class GamePlayManager : MonoBehaviour
         switch (CurrGameState)
         {
             case GAME_STATE.MAIN:
-                if (GamePlayCount % CommonData.GAME_START_AD_VIEW_COUNT == 0)
+                if (GamePlayCount >= CommonData.GAME_START_AD_VIEW_COUNT && GamePlayCount % CommonData.GAME_START_AD_VIEW_COUNT == 0)
                     GameStartViewAds();
                 else
                     GameReady();
